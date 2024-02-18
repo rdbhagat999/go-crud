@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "go-crud/docs"
 	"go-crud/src/config"
 	"go-crud/src/controller"
 	"go-crud/src/helper"
@@ -14,6 +15,12 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+// @title Tag Service API
+// @version 1.0.0
+// @description A Tag Service API in Golang using Gin Framework
+
+// @host localhost:8888
+// @BasePath /api/v1
 func main() {
 	log.Info().Msg("Server started")
 
