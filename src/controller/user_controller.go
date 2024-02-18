@@ -55,7 +55,7 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Produce  application/json
 // @Tag  user
 // @Success  200 {object} response.Response{}
-// @Router  /user/{userId} [PUT]
+// @Router  /users/{userId} [PUT]
 func (controller *UserController) Update(ctx *gin.Context) {
 	updateUserRequest := request.UpdateUserRequest{}
 	err := ctx.ShouldBindJSON(&updateUserRequest)

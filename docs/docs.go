@@ -141,41 +141,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/user/{userId}": {
-            "put": {
-                "description": "Update and save user in database",
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Update user",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Update user by id",
-                        "name": "userId",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "description": "Update user",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.UpdateUserRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/response.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/users": {
             "get": {
                 "description": "Returns a list of users",
@@ -233,6 +198,39 @@ const docTemplate = `{
                         "name": "userId",
                         "in": "path",
                         "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update and save user in database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Update user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateUserRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -349,11 +347,11 @@ const docTemplate = `{
                 "email",
                 "name",
                 "phone",
-                "user_id",
-                "username"
+                "user_id"
             ],
             "properties": {
                 "age": {
+                    "description": "UserName string ` + "`" + `validate:\"required,min=5,max=200\" json:\"username\"` + "`" + `",
                     "type": "integer",
                     "maximum": 60,
                     "minimum": 18
@@ -375,11 +373,6 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "integer"
-                },
-                "username": {
-                    "type": "string",
-                    "maxLength": 200,
-                    "minLength": 5
                 }
             }
         },

@@ -70,7 +70,7 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 		UserName: result.UserName,
 		Age:      result.Age,
 		Email:    result.Email,
-		Phone:    result.Email,
+		Phone:    result.Phone,
 		Tags:     result.Tags,
 	}
 
