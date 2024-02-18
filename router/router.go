@@ -1,28 +1,22 @@
 package router
 
 import (
-	"go-crud/controller"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter(tagController *controller.TagController) *gin.Engine {
+func NewRouter() (*gin.Engine, *gin.RouterGroup) {
 	router := gin.Default()
+	// router.Use(gin.Logger())
 
-	router.GET("", func(ctx *gin.Context) {
+	router.GET("/", func(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, "Welcome Home!")
 	})
 
 	baseRouter := router.Group("/api")
-	tagRouter := baseRouter.Group("/tags")
+	apiVersion1 := baseRouter.Group("/v1")
 
-	tagRouter.GET("", tagController.FindAll)
-	tagRouter.GET("/:tagId", tagController.FindById)
-	tagRouter.POST("", tagController.Create)
-	tagRouter.PUT("/:tagId", tagController.Update)
-	tagRouter.DELETE("/:tagId", tagController.Delete)
-
-	return router
+	return router, apiVersion1
 
 }

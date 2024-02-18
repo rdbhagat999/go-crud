@@ -21,16 +21,24 @@ func main() {
 
 	db.Table("tags").AutoMigrate(&model.Tag{})
 
-	tagRepo := repository.NewTagRepositoryImpl(db)
 	validate := validator.New()
-	tagS := service.NewTagServiceImpl(tagRepo, validate)
-	tagController := controller.NewTagController(tagS)
 
-	routes := router.NewRouter(tagController)
+	tagRepository := repository.NewTagRepositoryImpl(db)
+	tagService := service.NewTagServiceImpl(tagRepository, validate)
+	tagController := controller.NewTagController(tagService)
+
+	router, apiVersion1 := router.NewRouter()
+
+	tagRouter := apiVersion1.Group("/tags")
+	tagRouter.GET("/", tagController.FindAll)
+	tagRouter.GET("/:tagId", tagController.FindById)
+	tagRouter.POST("/", tagController.Create)
+	tagRouter.PUT("/:tagId", tagController.Update)
+	tagRouter.DELETE("/:tagId", tagController.Delete)
 
 	server := &http.Server{
 		Addr:    ":8888",
-		Handler: routes,
+		Handler: router,
 	}
 
 	err := server.ListenAndServe()
