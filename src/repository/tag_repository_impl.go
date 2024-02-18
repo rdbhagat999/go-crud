@@ -36,7 +36,9 @@ func (t *TagRepositoryImpl) FindAll() []model.Tag {
 // FindById implements TagRepository.
 func (t *TagRepositoryImpl) FindById(tagId int) (tag model.Tag, err error) {
 	var foundTag model.Tag
-	result := t.Db.First(&foundTag, tagId)
+	result := t.Db.Find(&foundTag, tagId)
+
+	// fmt.Println(foundTag)
 
 	if result != nil {
 		return foundTag, nil

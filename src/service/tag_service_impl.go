@@ -21,7 +21,8 @@ func (t *TagServiceImpl) Create(tag request.CreateTagRequest) {
 	helper.ErrorPanic(err)
 
 	tagModel := model.Tag{
-		Name: tag.Name,
+		Name:   tag.Name,
+		UserID: tag.UserID,
 	}
 
 	t.TagRepository.Save(tagModel)
@@ -39,8 +40,9 @@ func (t *TagServiceImpl) FindAll() []response.TagResponse {
 
 	for _, v := range result {
 		found := response.TagResponse{
-			Id:   v.Id,
-			Name: v.Name,
+			Id:     v.Id,
+			Name:   v.Name,
+			UserID: v.UserID,
 		}
 
 		tags = append(tags, found)
@@ -55,8 +57,9 @@ func (t *TagServiceImpl) FindById(tagId int) response.TagResponse {
 	helper.ErrorPanic(err)
 
 	tagReponse := response.TagResponse{
-		Id:   result.Id,
-		Name: result.Name,
+		Id:     result.Id,
+		Name:   result.Name,
+		UserID: result.UserID,
 	}
 
 	return tagReponse

@@ -134,16 +134,185 @@
                     }
                 }
             }
+        },
+        "/user/{userId}": {
+            "put": {
+                "description": "Update and save user in database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Update user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Update user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "description": "Returns a list of users",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get all users",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Save user in database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create user",
+                "parameters": [
+                    {
+                        "description": "Create user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.CreateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{userId}": {
+            "get": {
+                "description": "Returns a single user when userId maches id",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a single user by its id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Find user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete user from database",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Delete user by id",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "request.CreateTagRequest": {
             "type": "object",
             "required": [
-                "name"
+                "name",
+                "user_id"
             ],
             "properties": {
                 "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.CreateUserRequest": {
+            "type": "object",
+            "required": [
+                "age",
+                "email",
+                "name",
+                "phone",
+                "username"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "maximum": 60,
+                    "minimum": 18
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 10
+                },
+                "username": {
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 5
@@ -161,6 +330,47 @@
                     "type": "integer"
                 },
                 "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                }
+            }
+        },
+        "request.UpdateUserRequest": {
+            "type": "object",
+            "required": [
+                "age",
+                "email",
+                "name",
+                "phone",
+                "user_id",
+                "username"
+            ],
+            "properties": {
+                "age": {
+                    "type": "integer",
+                    "maximum": 60,
+                    "minimum": 18
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 200,
+                    "minLength": 5
+                },
+                "phone": {
+                    "type": "string",
+                    "maxLength": 15,
+                    "minLength": 10
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 5

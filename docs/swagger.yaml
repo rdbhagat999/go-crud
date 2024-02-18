@@ -6,8 +6,40 @@ definitions:
         maxLength: 200
         minLength: 5
         type: string
+      user_id:
+        type: integer
     required:
     - name
+    - user_id
+    type: object
+  request.CreateUserRequest:
+    properties:
+      age:
+        maximum: 60
+        minimum: 18
+        type: integer
+      email:
+        maxLength: 200
+        minLength: 5
+        type: string
+      name:
+        maxLength: 200
+        minLength: 5
+        type: string
+      phone:
+        maxLength: 15
+        minLength: 10
+        type: string
+      username:
+        maxLength: 200
+        minLength: 5
+        type: string
+    required:
+    - age
+    - email
+    - name
+    - phone
+    - username
     type: object
   request.UpdateTagRequest:
     properties:
@@ -20,6 +52,38 @@ definitions:
     required:
     - id
     - name
+    type: object
+  request.UpdateUserRequest:
+    properties:
+      age:
+        maximum: 60
+        minimum: 18
+        type: integer
+      email:
+        maxLength: 200
+        minLength: 5
+        type: string
+      name:
+        maxLength: 200
+        minLength: 5
+        type: string
+      phone:
+        maxLength: 15
+        minLength: 10
+        type: string
+      user_id:
+        type: integer
+      username:
+        maxLength: 200
+        minLength: 5
+        type: string
+    required:
+    - age
+    - email
+    - name
+    - phone
+    - user_id
+    - username
     type: object
   response.Response:
     properties:
@@ -119,4 +183,88 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update tag
+  /user/{userId}:
+    put:
+      description: Update and save user in database
+      parameters:
+      - description: Update user by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      - description: Update user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update user
+  /users:
+    get:
+      description: Returns a list of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all users
+    post:
+      description: Save user in database
+      parameters:
+      - description: Create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create user
+  /users/{userId}:
+    delete:
+      description: Delete user from database
+      parameters:
+      - description: Delete user by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete user
+    get:
+      description: Returns a single user when userId maches id
+      parameters:
+      - description: Find user by id
+        in: path
+        name: userId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get a single user by its id
 swagger: "2.0"

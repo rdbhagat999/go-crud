@@ -35,17 +35,21 @@ func main() {
 	db := config.DatabaseConnection(&loadConfig)
 
 	db.Table("tags").AutoMigrate(&model.Tag{})
+	db.Table("users").AutoMigrate(&model.User{})
 
 	validate := validator.New()
 
 	//Init Repository
 	tagRepository := repository.NewTagRepositoryImpl(db)
+	userRepository := repository.NewUserRepositoryImpl(db)
 
 	//Init Service
 	tagService := service.NewTagServiceImpl(tagRepository, validate)
+	userService := service.NewUserServiceImpl(userRepository, validate)
 
 	//Init Controller
 	tagController := controller.NewTagController(tagService)
+	userController := controller.NewUserController(userService)
 
 	router, apiVersion1 := router.NewRouter()
 
@@ -55,6 +59,13 @@ func main() {
 	tagRouter.POST("/", tagController.Create)
 	tagRouter.PUT("/:tagId", tagController.Update)
 	tagRouter.DELETE("/:tagId", tagController.Delete)
+
+	userRouter := apiVersion1.Group("/users")
+	userRouter.GET("/", userController.FindAll)
+	userRouter.GET("/:userId", userController.FindById)
+	userRouter.POST("/", userController.Create)
+	userRouter.PUT("/:userId", userController.Update)
+	userRouter.DELETE("/:userId", userController.Delete)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.SERVER_PORT,
