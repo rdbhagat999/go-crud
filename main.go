@@ -1,13 +1,13 @@
 package main
 
 import (
-	"go-crud/config"
-	"go-crud/controller"
-	"go-crud/helper"
-	"go-crud/model"
-	"go-crud/repository"
-	"go-crud/router"
-	"go-crud/service"
+	"go-crud/src/config"
+	"go-crud/src/controller"
+	"go-crud/src/helper"
+	"go-crud/src/model"
+	"go-crud/src/repository"
+	"go-crud/src/router"
+	"go-crud/src/service"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"

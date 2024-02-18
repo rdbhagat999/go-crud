@@ -1,11 +1,11 @@
 package service
 
 import (
-	"go-crud/data/request"
-	"go-crud/data/response"
-	"go-crud/helper"
-	"go-crud/model"
-	"go-crud/repository"
+	"go-crud/src/data/request"
+	"go-crud/src/data/response"
+	"go-crud/src/helper"
+	"go-crud/src/model"
+	"go-crud/src/repository"
 
 	"github.com/go-playground/validator/v10"
 )

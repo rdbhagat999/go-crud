@@ -1,8 +1,8 @@
 package service
 
 import (
-	"go-crud/data/request"
-	"go-crud/data/response"
+	"go-crud/src/data/request"
+	"go-crud/src/data/response"
 )
 
 type TagService interface {

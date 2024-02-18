@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"go-crud/helper"
+	"go-crud/src/helper"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
