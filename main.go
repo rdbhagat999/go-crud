@@ -10,6 +10,7 @@ import (
 	"go-crud/src/router"
 	"go-crud/src/service"
 	"net/http"
+	"time"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
@@ -24,14 +25,26 @@ import (
 func main() {
 	log.Info().Msg("Server started")
 
-	db := config.DatabaseConnection()
+	loadConfig, err := config.LoadConfig(".")
+
+	if err != nil {
+		evt := log.Fatal()
+		evt.Msg("🚀 Could not load environment variables")
+	}
+
+	db := config.DatabaseConnection(&loadConfig)
 
 	db.Table("tags").AutoMigrate(&model.Tag{})
 
 	validate := validator.New()
 
+	//Init Repository
 	tagRepository := repository.NewTagRepositoryImpl(db)
+
+	//Init Service
 	tagService := service.NewTagServiceImpl(tagRepository, validate)
+
+	//Init Controller
 	tagController := controller.NewTagController(tagService)
 
 	router, apiVersion1 := router.NewRouter()
@@ -44,11 +57,14 @@ func main() {
 	tagRouter.DELETE("/:tagId", tagController.Delete)
 
 	server := &http.Server{
-		Addr:    ":8888",
-		Handler: router,
+		Addr:           ":" + loadConfig.SERVER_PORT,
+		Handler:        router,
+		ReadTimeout:    10 * time.Second,
+		WriteTimeout:   10 * time.Second,
+		MaxHeaderBytes: 1 << 20,
 	}
 
-	err := server.ListenAndServe()
+	server_err := server.ListenAndServe()
 
-	helper.ErrorPanic(err)
+	helper.ErrorPanic(server_err)
 }

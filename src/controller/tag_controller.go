@@ -136,7 +136,7 @@ func (controller *TagController) FindById(ctx *gin.Context) {
 // @Summary  Get all tags
 // @Description  Returns a list of tags
 // @Produce  application/json
-// @Tag  tags
+// @Tag  tag
 // @Success  200 {object} response.Response{}
 // @Router  /tags [GET]
 func (controller *TagController) FindAll(ctx *gin.Context) {
