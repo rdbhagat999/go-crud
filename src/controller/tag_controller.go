@@ -65,7 +65,7 @@ func (controller *TagController) Update(ctx *gin.Context) {
 	id, errr := strconv.Atoi(tagId)
 	helper.ErrorPanic(errr)
 
-	updateTagRequest.Id = id
+	updateTagRequest.ID = id
 
 	controller.TagService.Update(updateTagRequest)
 

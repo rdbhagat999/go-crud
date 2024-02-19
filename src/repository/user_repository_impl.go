@@ -16,8 +16,8 @@ type UserRepositoryImpl struct {
 func (u *UserRepositoryImpl) Delete(userId int) {
 	var user model.User
 
-	result := u.Db.Model(&user).Delete(userId)
-	// result := t.Db.Where("id=?", tagId).Delete(&tag)
+	result := u.Db.Select("Tags").Model(&user).Delete(userId)
+	// result := u.Db.Select("Tags").Where("id=?", userId).Delete(&user)
 	helper.ErrorPanic(result.Error)
 }
 

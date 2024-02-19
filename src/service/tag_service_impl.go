@@ -40,7 +40,7 @@ func (t *TagServiceImpl) FindAll() []response.TagResponse {
 
 	for _, v := range result {
 		found := response.TagResponse{
-			Id:     v.Id,
+			ID:     v.ID,
 			Name:   v.Name,
 			UserID: v.UserID,
 		}
@@ -57,7 +57,7 @@ func (t *TagServiceImpl) FindById(tagId int) response.TagResponse {
 	helper.ErrorPanic(err)
 
 	tagReponse := response.TagResponse{
-		Id:     result.Id,
+		ID:     result.ID,
 		Name:   result.Name,
 		UserID: result.UserID,
 	}
@@ -67,7 +67,7 @@ func (t *TagServiceImpl) FindById(tagId int) response.TagResponse {
 
 // Update implements TagService.
 func (t *TagServiceImpl) Update(tag request.UpdateTagRequest) {
-	found, err := t.TagRepository.FindById(tag.Id)
+	found, err := t.TagRepository.FindById(tag.ID)
 	helper.ErrorPanic(err)
 
 	found.Name = tag.Name

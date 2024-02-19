@@ -16,7 +16,7 @@ type TagRepositoryImpl struct {
 // Delete implements TagRepository.
 func (t *TagRepositoryImpl) Delete(tagId int) {
 	deleteTag := request.DeleteTagRequest{
-		Id: tagId,
+		ID: tagId,
 	}
 	var tag model.Tag
 
@@ -57,7 +57,7 @@ func (t *TagRepositoryImpl) Save(tag model.Tag) {
 // Update implements TagRepository.
 func (t *TagRepositoryImpl) Update(tag model.Tag) {
 	var updateTag = request.UpdateTagRequest{
-		Id:   tag.Id,
+		ID:   tag.ID,
 		Name: tag.Name,
 	}
 

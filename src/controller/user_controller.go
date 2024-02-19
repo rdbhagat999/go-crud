@@ -65,7 +65,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 	id, errr := strconv.Atoi(userId)
 	helper.ErrorPanic(errr)
 
-	updateUserRequest.Id = id
+	updateUserRequest.ID = id
 
 	controller.UserService.Update(updateUserRequest)
 

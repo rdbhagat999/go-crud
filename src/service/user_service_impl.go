@@ -44,7 +44,7 @@ func (u *UserServiceImpl) FindAll() []response.UserResponse {
 
 	for _, v := range result {
 		found := response.UserResponse{
-			Id:       v.Id,
+			ID:       v.ID,
 			Name:     v.Name,
 			UserName: v.UserName,
 			Age:      v.Age,
@@ -65,7 +65,7 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 	helper.ErrorPanic(err)
 
 	userReponse := response.UserResponse{
-		Id:       result.Id,
+		ID:       result.ID,
 		Name:     result.Name,
 		UserName: result.UserName,
 		Age:      result.Age,
@@ -79,7 +79,7 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 
 // Update implements UserService.
 func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
-	found, err := u.UserRepository.FindById(user.Id)
+	found, err := u.UserRepository.FindById(user.ID)
 	helper.ErrorPanic(err)
 
 	found.Name = user.Name

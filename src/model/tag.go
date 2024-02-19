@@ -1,7 +1,7 @@
 package model
 
 type Tag struct {
-	Id     int    `gorm:"type:int;primarKey"`
-	Name   string `gorm:"type:varchar(255)"`
-	UserID int    `gorm:"type:int"`
+	ID     int    `gorm:"type:int;primarKey" json:"id"`
+	Name   string `gorm:"type:varchar(255)" json:"name"`
+	UserID int    `gorm:"type:int" json:"user_id"`
 }
