@@ -38,17 +38,19 @@ func (u *UserRepositoryImpl) FindById(userId int) (user model.User, err error) {
 }
 
 // Save implements UserRepository.
-func (u *UserRepositoryImpl) Save(user model.User) {
+func (u *UserRepositoryImpl) Save(user model.User) (us model.User, err error) {
 	result := u.Db.Create(&user)
 	helper.ErrorPanic(result.Error)
+
+	return u.FindById(user.ID)
 }
 
 // Update implements UserRepository.
-func (u *UserRepositoryImpl) Update(user model.User) {
+func (u *UserRepositoryImpl) Update(user model.User) (us model.User, err error) {
 	var updateUser = request.UpdateUserRequest{
 		// Id:   user.Id,
 		Name: user.Name,
-		// UserName: user.UserName,
+		// Username: user.Username,
 		Email: user.Email,
 		Age:   user.Age,
 		Phone: user.Phone,
@@ -56,6 +58,9 @@ func (u *UserRepositoryImpl) Update(user model.User) {
 
 	result := u.Db.Model(&user).Updates(updateUser)
 	helper.ErrorPanic(result.Error)
+
+	return u.FindById(user.ID)
+
 }
 
 func NewUserRepositoryImpl(Db *gorm.DB) UserRepository {

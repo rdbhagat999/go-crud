@@ -42,20 +42,22 @@ func (t *TagRepositoryImpl) FindById(tagId int) (tag model.Tag, err error) {
 
 	if result != nil {
 		return foundTag, nil
-	} else {
-		return foundTag, errors.New("tag not found")
 	}
+
+	return foundTag, errors.New("tag not found")
 }
 
 // Save implements TagRepository.
-func (t *TagRepositoryImpl) Save(tag model.Tag) {
+func (t *TagRepositoryImpl) Save(tag model.Tag) (tg model.Tag, err error) {
 
 	result := t.Db.Create(&tag)
 	helper.ErrorPanic(result.Error)
+
+	return t.FindById(tag.ID)
 }
 
 // Update implements TagRepository.
-func (t *TagRepositoryImpl) Update(tag model.Tag) {
+func (t *TagRepositoryImpl) Update(tag model.Tag) (tg model.Tag, err error) {
 	var updateTag = request.UpdateTagRequest{
 		ID:   tag.ID,
 		Name: tag.Name,
@@ -63,6 +65,8 @@ func (t *TagRepositoryImpl) Update(tag model.Tag) {
 
 	result := t.Db.Model(&tag).Updates(updateTag)
 	helper.ErrorPanic(result.Error)
+
+	return t.FindById(tag.ID)
 }
 
 func NewTagRepositoryImpl(Db *gorm.DB) TagRepository {

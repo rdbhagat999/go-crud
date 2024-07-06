@@ -351,7 +351,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "age": {
-                    "description": "UserName string ` + "`" + `validate:\"required,min=5,max=200\" json:\"username\"` + "`" + `",
+                    "description": "Username string ` + "`" + `validate:\"required,min=5,max=200\" json:\"username\"` + "`" + `",
                     "type": "integer",
                     "maximum": 60,
                     "minimum": 18

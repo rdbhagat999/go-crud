@@ -16,7 +16,7 @@ type TagServiceImpl struct {
 }
 
 // Create implements TagService.
-func (t *TagServiceImpl) Create(tag request.CreateTagRequest) {
+func (t *TagServiceImpl) Create(tag request.CreateTagRequest) response.TagResponse {
 	err := t.Validate.Struct(tag)
 	helper.ErrorPanic(err)
 
@@ -25,7 +25,17 @@ func (t *TagServiceImpl) Create(tag request.CreateTagRequest) {
 		UserID: tag.UserID,
 	}
 
-	t.TagRepository.Save(tagModel)
+	result, resultErr := t.TagRepository.Save(tagModel)
+
+	helper.ErrorPanic(resultErr)
+
+	tagReponse := response.TagResponse{
+		ID:     result.ID,
+		Name:   result.Name,
+		UserID: result.UserID,
+	}
+
+	return tagReponse
 }
 
 // Delete implements TagService.
@@ -66,13 +76,23 @@ func (t *TagServiceImpl) FindById(tagId int) response.TagResponse {
 }
 
 // Update implements TagService.
-func (t *TagServiceImpl) Update(tag request.UpdateTagRequest) {
+func (t *TagServiceImpl) Update(tag request.UpdateTagRequest) response.TagResponse {
 	found, err := t.TagRepository.FindById(tag.ID)
 	helper.ErrorPanic(err)
 
 	found.Name = tag.Name
 
-	t.TagRepository.Update(found)
+	result, resultErr := t.TagRepository.Update(found)
+
+	helper.ErrorPanic(resultErr)
+
+	tagReponse := response.TagResponse{
+		ID:     result.ID,
+		Name:   result.Name,
+		UserID: result.UserID,
+	}
+
+	return tagReponse
 }
 
 func NewTagServiceImpl(tagRepository repository.TagRepository, validate *validator.Validate) TagService {
