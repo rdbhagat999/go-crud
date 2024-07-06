@@ -56,7 +56,7 @@ definitions:
   request.UpdateUserRequest:
     properties:
       age:
-        description: UserName string `validate:"required,min=5,max=200" json:"username"`
+        description: Username string `validate:"required,min=5,max=200" json:"username"`
         maximum: 60
         minimum: 18
         type: integer

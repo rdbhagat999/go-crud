@@ -16,19 +16,32 @@ type UserServiceImpl struct {
 }
 
 // Create implements UserService.
-func (u *UserServiceImpl) Create(user request.CreateUserRequest) {
+func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserResponse {
 	err := u.Validate.Struct(user)
 	helper.ErrorPanic(err)
 
 	userModel := model.User{
 		Name:     user.Name,
-		UserName: user.UserName,
+		Username: user.Username,
 		Age:      user.Age,
 		Email:    user.Email,
 		Phone:    user.Phone,
 	}
 
-	u.UserRepository.Save(userModel)
+	result, resultErr := u.UserRepository.Save(userModel)
+	helper.ErrorPanic(resultErr)
+
+	userReponse := response.UserResponse{
+		ID:       result.ID,
+		Name:     result.Name,
+		Username: result.Username,
+		Age:      result.Age,
+		Email:    result.Email,
+		Phone:    result.Phone,
+		Tags:     result.Tags,
+	}
+
+	return userReponse
 }
 
 // Delete implements UserService.
@@ -46,7 +59,7 @@ func (u *UserServiceImpl) FindAll() []response.UserResponse {
 		found := response.UserResponse{
 			ID:       v.ID,
 			Name:     v.Name,
-			UserName: v.UserName,
+			Username: v.Username,
 			Age:      v.Age,
 			Email:    v.Email,
 			Phone:    v.Phone,
@@ -67,7 +80,7 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 	userReponse := response.UserResponse{
 		ID:       result.ID,
 		Name:     result.Name,
-		UserName: result.UserName,
+		Username: result.Username,
 		Age:      result.Age,
 		Email:    result.Email,
 		Phone:    result.Phone,
@@ -78,17 +91,31 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 }
 
 // Update implements UserService.
-func (u *UserServiceImpl) Update(user request.UpdateUserRequest) {
+func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.UserResponse {
 	found, err := u.UserRepository.FindById(user.ID)
 	helper.ErrorPanic(err)
 
 	found.Name = user.Name
-	// found.UserName = user.UserName
+	// found.Username = user.Username
 	found.Age = user.Age
 	found.Email = user.Email
 	found.Phone = user.Phone
 
-	u.UserRepository.Update(found)
+	result, resultErr := u.UserRepository.Update(found)
+	helper.ErrorPanic(resultErr)
+
+	userReponse := response.UserResponse{
+		ID:       result.ID,
+		Name:     result.Name,
+		Username: result.Username,
+		Age:      result.Age,
+		Email:    result.Email,
+		Phone:    result.Phone,
+		Tags:     result.Tags,
+	}
+
+	return userReponse
+
 }
 
 func NewUserServiceImpl(userRepository repository.UserRepository, validate *validator.Validate) UserService {

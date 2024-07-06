@@ -6,8 +6,8 @@ import (
 )
 
 type TagService interface {
-	Create(tag request.CreateTagRequest)
-	Update(tag request.UpdateTagRequest)
+	Create(tag request.CreateTagRequest) response.TagResponse
+	Update(tag request.UpdateTagRequest) response.TagResponse
 	Delete(tagId int)
 	FindById(tagId int) response.TagResponse
 	FindAll() []response.TagResponse

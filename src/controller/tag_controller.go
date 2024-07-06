@@ -34,12 +34,12 @@ func (controller *TagController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&createTagRequest)
 	helper.ErrorPanic(err)
 
-	controller.TagService.Create(createTagRequest)
+	tag := controller.TagService.Create(createTagRequest)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   tag,
 	}
 
 	ctx.Header("Content-Type", "application/json")
@@ -67,12 +67,12 @@ func (controller *TagController) Update(ctx *gin.Context) {
 
 	updateTagRequest.ID = id
 
-	controller.TagService.Update(updateTagRequest)
+	tag := controller.TagService.Update(updateTagRequest)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   tag,
 	}
 
 	ctx.Header("Content-Type", "application/json")

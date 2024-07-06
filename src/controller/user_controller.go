@@ -34,12 +34,12 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	helper.ErrorPanic(err)
 
-	controller.UserService.Create(createUserRequest)
+	user := controller.UserService.Create(createUserRequest)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   user,
 	}
 
 	ctx.Header("Content-Type", "application/json")
@@ -67,12 +67,12 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 	updateUserRequest.ID = id
 
-	controller.UserService.Update(updateUserRequest)
+	user := controller.UserService.Update(updateUserRequest)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
-		Data:   nil,
+		Data:   user,
 	}
 
 	ctx.Header("Content-Type", "application/json")

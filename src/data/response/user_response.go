@@ -5,7 +5,7 @@ import "go-crud/src/model"
 type UserResponse struct {
 	ID       int         `json:"id"`
 	Name     string      `json:"name"`
-	UserName string      `json:"username"`
+	Username string      `json:"username"`
 	Age      int         `json:"age"`
 	Email    string      `json:"email"`
 	Phone    string      `json:"phone"`
