@@ -6,6 +6,7 @@ import (
 	"go-crud/src/model"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type UserRepositoryImpl struct {
@@ -16,8 +17,8 @@ type UserRepositoryImpl struct {
 func (u *UserRepositoryImpl) Delete(userId int) {
 	var user model.User
 
-	result := u.Db.Select("Tags").Model(&user).Delete(userId)
-	// result := u.Db.Select("Tags").Where("id=?", userId).Delete(&user)
+	result := u.Db.Select("Tags", "Posts").Model(&user).Delete(userId)
+	// result := u.Db.Select("Tags", "Posts").Where("id=?", userId).Delete(&user)
 	helper.ErrorPanic(result.Error)
 }
 
@@ -25,7 +26,8 @@ func (u *UserRepositoryImpl) Delete(userId int) {
 func (u *UserRepositoryImpl) FindAll() (users []model.User, err error) {
 	var foundUsers []model.User
 	// result := u.Db.Find(&foundUsers)
-	err = u.Db.Model(&model.User{}).Preload("Tags").Find(&foundUsers).Error
+	// err = u.Db.Model(&model.User{}).Preload("Posts").Preload("Tags").Find(&foundUsers).Error
+	err = u.Db.Model(&model.User{}).Preload(clause.Associations).Find(&foundUsers).Error
 	return foundUsers, err
 }
 
@@ -33,7 +35,8 @@ func (u *UserRepositoryImpl) FindAll() (users []model.User, err error) {
 func (u *UserRepositoryImpl) FindById(userId int) (user model.User, err error) {
 	var foundUser model.User
 	// result := u.Db.First(&foundUser, userId)
-	err = u.Db.Model(&model.User{}).Preload("Tags").Find(&foundUser, userId).Error
+	// err = u.Db.Model(&model.User{}).Preload("Posts").Preload("Tags").Find(&foundUser, userId).Error
+	err = u.Db.Model(&model.User{}).Preload(clause.Associations).Find(&foundUser, userId).Error
 	return foundUser, err
 }
 

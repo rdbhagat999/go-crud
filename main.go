@@ -78,20 +78,24 @@ func main() {
 	db := config.DatabaseConnection(&loadConfig)
 
 	db.Table("tags").AutoMigrate(&model.Tag{})
+	db.Table("posts").AutoMigrate(&model.Post{})
 	db.Table("users").AutoMigrate(&model.User{})
 
 	validate := validator.New()
 
 	//Init Repository
 	tagRepository := repository.NewTagRepositoryImpl(db)
+	postRepository := repository.NewPostRepositoryImpl(db)
 	userRepository := repository.NewUserRepositoryImpl(db)
 
 	//Init Service
 	tagService := service.NewTagServiceImpl(tagRepository, validate)
+	postService := service.NewPostServiceImpl(postRepository, validate)
 	userService := service.NewUserServiceImpl(userRepository, validate)
 
 	//Init Controller
 	tagController := controller.NewTagController(tagService)
+	postController := controller.NewPostController(postService)
 	userController := controller.NewUserController(userService)
 
 	router, apiVersion1 := router.NewRouter()
@@ -102,6 +106,13 @@ func main() {
 	tagRouter.POST("/", tagController.Create)
 	tagRouter.PUT("/:tagId", tagController.Update)
 	tagRouter.DELETE("/:tagId", tagController.Delete)
+
+	postRouter := apiVersion1.Group("/posts")
+	postRouter.GET("/", postController.FindAll)
+	postRouter.GET("/:postId", postController.FindById)
+	postRouter.POST("/", postController.Create)
+	postRouter.PUT("/:postId", postController.Update)
+	postRouter.DELETE("/:postId", postController.Delete)
 
 	userRouter := apiVersion1.Group("/users")
 	userRouter.GET("/", userController.FindAll)

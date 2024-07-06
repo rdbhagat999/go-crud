@@ -45,8 +45,9 @@ func (t *TagServiceImpl) Delete(tagId int) {
 
 // FindAll implements TagService.
 func (t *TagServiceImpl) FindAll() []response.TagResponse {
-	var tags []response.TagResponse
-	result := t.TagRepository.FindAll()
+	var tags = []response.TagResponse{}
+	result, err := t.TagRepository.FindAll()
+	helper.ErrorPanic(err)
 
 	for _, v := range result {
 		found := response.TagResponse{

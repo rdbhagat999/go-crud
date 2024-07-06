@@ -39,6 +39,7 @@ func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserRe
 		Email:    result.Email,
 		Phone:    result.Phone,
 		Tags:     result.Tags,
+		Posts:    result.Posts,
 	}
 
 	return userReponse
@@ -51,7 +52,7 @@ func (u *UserServiceImpl) Delete(UserId int) {
 
 // FindAll implements UserService.
 func (u *UserServiceImpl) FindAll() []response.UserResponse {
-	var users []response.UserResponse
+	var users = []response.UserResponse{}
 	result, err := u.UserRepository.FindAll()
 	helper.ErrorPanic(err)
 
@@ -64,6 +65,7 @@ func (u *UserServiceImpl) FindAll() []response.UserResponse {
 			Email:    v.Email,
 			Phone:    v.Phone,
 			Tags:     v.Tags,
+			Posts:    v.Posts,
 		}
 
 		users = append(users, found)
@@ -85,6 +87,7 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 		Email:    result.Email,
 		Phone:    result.Phone,
 		Tags:     result.Tags,
+		Posts:    result.Posts,
 	}
 
 	return userReponse
@@ -112,6 +115,7 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.UserRe
 		Email:    result.Email,
 		Phone:    result.Phone,
 		Tags:     result.Tags,
+		Posts:    result.Posts,
 	}
 
 	return userReponse
