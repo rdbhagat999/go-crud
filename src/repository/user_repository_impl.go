@@ -13,6 +13,28 @@ type UserRepositoryImpl struct {
 	Db *gorm.DB
 }
 
+// Login implements UserRepository.
+func (u *UserRepositoryImpl) Login(user request.LoginUserRequest) (authUser model.User, err error) {
+	var foundUser model.User
+
+	err = u.Db.Model(&model.User{}).Preload(clause.Associations).Find(&foundUser, "username = ?", user.Username).Error
+	helper.ErrorPanic(err)
+
+	return foundUser, err
+
+}
+
+// FindByUsername implements UserRepository.
+func (u *UserRepositoryImpl) FindByUsername(username string) (authUser model.User, err error) {
+	var foundUser model.User
+
+	err = u.Db.Model(&model.User{}).Preload(clause.Associations).Find(&foundUser, "username = ?", username).Error
+	helper.ErrorPanic(err)
+
+	return foundUser, err
+
+}
+
 // Delete implements UserRepository.
 func (u *UserRepositoryImpl) Delete(userId int) {
 	var user model.User
@@ -45,7 +67,7 @@ func (u *UserRepositoryImpl) Save(user model.User) (us model.User, err error) {
 	result := u.Db.Create(&user)
 	helper.ErrorPanic(result.Error)
 
-	return u.FindById(user.ID)
+	return u.FindById(int(user.ID))
 }
 
 // Update implements UserRepository.
@@ -55,14 +77,14 @@ func (u *UserRepositoryImpl) Update(user model.User) (us model.User, err error) 
 		Name: user.Name,
 		// Username: user.Username,
 		Email: user.Email,
-		Age:   user.Age,
+		Age:   int(user.Age),
 		Phone: user.Phone,
 	}
 
 	result := u.Db.Model(&user).Updates(updateUser)
 	helper.ErrorPanic(result.Error)
 
-	return u.FindById(user.ID)
+	return u.FindById(int(user.ID))
 
 }
 

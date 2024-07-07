@@ -52,13 +52,13 @@ func (p *PostRepositoryImpl) Save(post model.Post) (ps model.Post, err error) {
 	result := p.Db.Create(&post)
 	helper.ErrorPanic(result.Error)
 
-	return p.FindById(post.ID)
+	return p.FindById(int(post.ID))
 }
 
 // Update implements PostRepository.
 func (p *PostRepositoryImpl) Update(post model.Post) (ps model.Post, err error) {
 	var updatePost = request.UpdatePostRequest{
-		ID:    post.ID,
+		ID:    int(post.ID),
 		Title: post.Title,
 		Body:  post.Body,
 	}
@@ -66,7 +66,7 @@ func (p *PostRepositoryImpl) Update(post model.Post) (ps model.Post, err error) 
 	result := p.Db.Model(&post).Updates(updatePost)
 	helper.ErrorPanic(result.Error)
 
-	return p.FindById(post.ID)
+	return p.FindById(int(post.ID))
 }
 
 func NewPostRepositoryImpl(Db *gorm.DB) PostRepository {

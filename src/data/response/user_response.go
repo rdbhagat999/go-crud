@@ -12,3 +12,7 @@ type UserResponse struct {
 	Tags     []model.Tag  `json:"tags"`
 	Posts    []model.Post `json:"posts"`
 }
+
+type LoginResponse struct {
+	Token string `json:"token"`
+}

@@ -52,20 +52,20 @@ func (t *TagRepositoryImpl) Save(tag model.Tag) (tg model.Tag, err error) {
 	result := t.Db.Create(&tag)
 	helper.ErrorPanic(result.Error)
 
-	return t.FindById(tag.ID)
+	return t.FindById(int(tag.ID))
 }
 
 // Update implements TagRepository.
 func (t *TagRepositoryImpl) Update(tag model.Tag) (tg model.Tag, err error) {
 	var updateTag = request.UpdateTagRequest{
-		ID:   tag.ID,
+		ID:   int(tag.ID),
 		Name: tag.Name,
 	}
 
 	result := t.Db.Model(&tag).Updates(updateTag)
 	helper.ErrorPanic(result.Error)
 
-	return t.FindById(tag.ID)
+	return t.FindById(int(tag.ID))
 }
 
 func NewTagRepositoryImpl(Db *gorm.DB) TagRepository {

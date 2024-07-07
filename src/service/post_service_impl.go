@@ -23,7 +23,7 @@ func (p *PostServiceImpl) Create(post request.CreatePostRequest) response.PostRe
 	postModel := model.Post{
 		Title:  post.Title,
 		Body:   post.Body,
-		UserID: post.UserID,
+		UserID: uint(post.UserID),
 	}
 
 	result, resultErr := p.PostRepository.Save(postModel)
@@ -31,10 +31,10 @@ func (p *PostServiceImpl) Create(post request.CreatePostRequest) response.PostRe
 	helper.ErrorPanic(resultErr)
 
 	postReponse := response.PostResponse{
-		ID:     result.ID,
+		ID:     int(result.ID),
 		Title:  result.Title,
 		Body:   result.Body,
-		UserID: result.UserID,
+		UserID: int(result.UserID),
 	}
 
 	return postReponse
@@ -53,10 +53,10 @@ func (p *PostServiceImpl) FindAll() []response.PostResponse {
 
 	for _, v := range result {
 		found := response.PostResponse{
-			ID:     v.ID,
+			ID:     int(v.ID),
 			Title:  v.Title,
 			Body:   v.Body,
-			UserID: v.UserID,
+			UserID: int(v.UserID),
 		}
 
 		posts = append(posts, found)
@@ -71,10 +71,10 @@ func (p *PostServiceImpl) FindById(postId int) response.PostResponse {
 	helper.ErrorPanic(err)
 
 	postReponse := response.PostResponse{
-		ID:     result.ID,
+		ID:     int(result.ID),
 		Title:  result.Title,
 		Body:   result.Body,
-		UserID: result.UserID,
+		UserID: int(result.UserID),
 	}
 
 	return postReponse
@@ -93,10 +93,10 @@ func (p *PostServiceImpl) Update(post request.UpdatePostRequest) response.PostRe
 	helper.ErrorPanic(resultErr)
 
 	postReponse := response.PostResponse{
-		ID:     result.ID,
+		ID:     int(result.ID),
 		Title:  result.Title,
 		Body:   result.Body,
-		UserID: result.UserID,
+		UserID: int(result.UserID),
 	}
 
 	return postReponse

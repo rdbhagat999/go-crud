@@ -1,14 +1,18 @@
 package controller
 
 import (
+	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
 	"go-crud/src/service"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type UserController struct {
@@ -35,6 +39,174 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 
 	user := controller.UserService.Create(createUserRequest)
+
+	webResponse := response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   user,
+	}
+
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, webResponse)
+
+}
+
+// AuthUser godoc
+// @Summary  Get authenticated user
+// @Description  Get user in database
+// @Param
+// @Produce  application/json
+// @Tag  user
+// @Success  200 {object} response.Response{}
+// @Router  /users/user [POST]
+func (controller *UserController) AuthUser(ctx *gin.Context) {
+	var webResponse response.Response
+	var username string
+	var expiresAt *jwt.NumericDate
+
+	jwtString, cookieError := ctx.Cookie("jwt")
+	// helper.ErrorPanic(cookieError)
+
+	if cookieError != nil {
+		fmt.Println(cookieError.Error())
+
+		webResponse = response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: cookieError.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	token, parseErr := jwt.ParseWithClaims(jwtString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("TOKEN_SECRET")), nil
+	})
+
+	if parseErr != nil {
+		fmt.Println(parseErr.Error())
+		// helper.ErrorPanic(parseErr)
+		webResponse = response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: parseErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	} else if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok {
+		fmt.Println(claims.Issuer)
+		username = claims.Issuer
+		expiresAt = claims.ExpiresAt
+	} else {
+		fmt.Println("unknown claims type, cannot proceed")
+
+		webResponse = response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: "unknown claims type, cannot proceed",
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	if username == "" {
+		webResponse = response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: "invalid token",
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+	}
+
+	if jwt.NewNumericDate(time.Now()).UnixNano() > expiresAt.UnixNano() {
+		webResponse = response.Response{
+			Code:   http.StatusBadRequest,
+			Status: http.StatusText(http.StatusBadRequest),
+			Data:   nil,
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
+
+	user := controller.UserService.FindByUsername(username)
+
+	webResponse = response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   user,
+	}
+
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, webResponse)
+
+}
+
+// Logout godoc
+// @Summary  Logout authenticated user
+// @Description  Logout user in database
+// @Param
+// @Produce  application/json
+// @Tag  user
+// @Success  200 {object} response.Response{}
+// @Router  /users/Logout [POST]
+func (controller *UserController) Logout(ctx *gin.Context) {
+
+	ctx.SetCookie("jwt", "", time.Now().Add(-time.Hour*24).Second(), "/", "", false, true)
+
+	webResponse := response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   nil,
+	}
+
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, webResponse)
+
+}
+
+// LoginUser godoc
+// @Summary  Login user
+// @Description  Login user in database
+// @Param  user body request.LoginUserRequest true "Login user"
+// @Produce  application/json
+// @Tag  user
+// @Success  200 {object} response.Response{}
+// @Router  /users/login [POST]
+func (controller *UserController) Login(ctx *gin.Context) {
+	loginUserRequest := request.LoginUserRequest{}
+	err := ctx.ShouldBindJSON(&loginUserRequest)
+	helper.ErrorPanic(err)
+
+	user := controller.UserService.Login(loginUserRequest)
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
+		// Also fixed dates can be used for the NumericDate
+		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+		Issuer:    user.Username,
+		ID:        strconv.Itoa(int(user.ID)),
+	})
+
+	tokenString, tokenErr := token.SignedString([]byte(os.Getenv("TOKEN_SECRET")))
+	helper.ErrorPanic(tokenErr)
+
+	ctx.SetCookie("jwt", tokenString, time.Now().Add(time.Hour*24).Second(), "/", "", false, true)
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,

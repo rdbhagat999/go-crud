@@ -14,6 +14,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
 )
@@ -100,6 +101,18 @@ func main() {
 
 	router, apiVersion1 := router.NewRouter()
 
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		// AllowOriginFunc: func(origin string) bool {
+		// 	return origin == "https://github.com"
+		// },
+		MaxAge: 24 * time.Hour,
+	}))
+
 	tagRouter := apiVersion1.Group("/tags")
 	tagRouter.GET("/", tagController.FindAll)
 	tagRouter.GET("/:tagId", tagController.FindById)
@@ -118,6 +131,9 @@ func main() {
 	userRouter.GET("/", userController.FindAll)
 	userRouter.GET("/:userId", userController.FindById)
 	userRouter.POST("/", userController.Create)
+	userRouter.POST("/login", userController.Login)
+	userRouter.POST("/logout", userController.Logout)
+	userRouter.POST("/authuser", userController.AuthUser)
 	userRouter.PUT("/:userId", userController.Update)
 	userRouter.DELETE("/:userId", userController.Delete)
 
