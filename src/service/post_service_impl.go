@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
@@ -18,6 +19,7 @@ type PostServiceImpl struct {
 // Create implements PostService.
 func (p *PostServiceImpl) Create(post request.CreatePostRequest) response.PostResponse {
 	err := p.Validate.Struct(post)
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
 
 	postModel := model.Post{
@@ -49,6 +51,7 @@ func (p *PostServiceImpl) Delete(postId int) {
 func (p *PostServiceImpl) FindAll() []response.PostResponse {
 	var posts = []response.PostResponse{}
 	result, err := p.PostRepository.FindAll()
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
 
 	for _, v := range result {
@@ -68,6 +71,7 @@ func (p *PostServiceImpl) FindAll() []response.PostResponse {
 // FindById implements PostService.
 func (p *PostServiceImpl) FindById(postId int) response.PostResponse {
 	result, err := p.PostRepository.FindById(postId)
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
 
 	postReponse := response.PostResponse{
@@ -82,14 +86,17 @@ func (p *PostServiceImpl) FindById(postId int) response.PostResponse {
 
 // Update implements PostService.
 func (p *PostServiceImpl) Update(post request.UpdatePostRequest) response.PostResponse {
-	found, err := p.PostRepository.FindById(post.ID)
-	helper.ErrorPanic(err)
+	err := p.Validate.Struct(post)
+	fmt.Println(err.Error())
+
+	found, foundErr := p.PostRepository.FindById(post.ID)
+	fmt.Println(foundErr.Error())
+	helper.ErrorPanic(foundErr)
 
 	found.Title = post.Title
 	found.Body = post.Body
 
 	result, resultErr := p.PostRepository.Update(found)
-
 	helper.ErrorPanic(resultErr)
 
 	postReponse := response.PostResponse{

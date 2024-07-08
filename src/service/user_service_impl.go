@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
@@ -20,6 +21,7 @@ type UserServiceImpl struct {
 // Create implements UserService.
 func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserResponse {
 	err := u.Validate.Struct(user)
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
 
 	password, passErr := bcrypt.GenerateFromPassword([]byte(user.Password), 15)
@@ -53,8 +55,12 @@ func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserRe
 
 // Create implements UserService.
 func (u *UserServiceImpl) Login(user request.LoginUserRequest) response.UserResponse {
-	result, err := u.UserRepository.Login(user)
+	err := u.Validate.Struct(user)
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
+
+	result, loginErr := u.UserRepository.Login(user)
+	helper.ErrorPanic(loginErr)
 
 	compareErr := bcrypt.CompareHashAndPassword(result.Password, []byte(user.Password))
 	helper.ErrorPanic(compareErr)

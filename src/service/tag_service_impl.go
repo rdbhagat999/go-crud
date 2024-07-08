@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
@@ -18,6 +19,7 @@ type TagServiceImpl struct {
 // Create implements TagService.
 func (t *TagServiceImpl) Create(tag request.CreateTagRequest) response.TagResponse {
 	err := t.Validate.Struct(tag)
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
 
 	tagModel := model.Tag{
@@ -78,8 +80,12 @@ func (t *TagServiceImpl) FindById(tagId int) response.TagResponse {
 
 // Update implements TagService.
 func (t *TagServiceImpl) Update(tag request.UpdateTagRequest) response.TagResponse {
-	found, err := t.TagRepository.FindById(tag.ID)
-	helper.ErrorPanic(err)
+	err := t.Validate.Struct(tag)
+	fmt.Println(err.Error())
+
+	found, foundErr := t.TagRepository.FindById(tag.ID)
+	fmt.Println(foundErr.Error())
+	helper.ErrorPanic(foundErr)
 
 	found.Name = tag.Name
 
