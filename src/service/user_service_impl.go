@@ -1,11 +1,14 @@
 package service
 
 import (
+	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
 	"go-crud/src/model"
 	"go-crud/src/repository"
+
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -18,27 +21,81 @@ type UserServiceImpl struct {
 // Create implements UserService.
 func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserResponse {
 	err := u.Validate.Struct(user)
+	fmt.Println(err.Error())
 	helper.ErrorPanic(err)
+
+	password, passErr := bcrypt.GenerateFromPassword([]byte(user.Password), 15)
+	helper.ErrorPanic(passErr)
 
 	userModel := model.User{
 		Name:     user.Name,
 		Username: user.Username,
-		Age:      user.Age,
+		Age:      uint(user.Age),
 		Email:    user.Email,
 		Phone:    user.Phone,
+		Password: password,
 	}
 
 	result, resultErr := u.UserRepository.Save(userModel)
 	helper.ErrorPanic(resultErr)
 
 	userReponse := response.UserResponse{
-		ID:       result.ID,
+		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
-		Age:      result.Age,
+		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
 		Tags:     result.Tags,
+		Posts:    result.Posts,
+	}
+
+	return userReponse
+}
+
+// Create implements UserService.
+func (u *UserServiceImpl) Login(user request.LoginUserRequest) response.UserResponse {
+	err := u.Validate.Struct(user)
+	fmt.Println(err.Error())
+	helper.ErrorPanic(err)
+
+	result, loginErr := u.UserRepository.Login(user)
+	helper.ErrorPanic(loginErr)
+
+	compareErr := bcrypt.CompareHashAndPassword(result.Password, []byte(user.Password))
+	helper.ErrorPanic(compareErr)
+
+	// loadConfig, loadConfigErr := config.LoadConfig("../../app.env")
+	// helper.ErrorPanic(loadConfigErr)
+
+	userReponse := response.UserResponse{
+		ID:       int(result.ID),
+		Name:     result.Name,
+		Username: result.Username,
+		Age:      int(result.Age),
+		Email:    result.Email,
+		Phone:    result.Phone,
+		Tags:     result.Tags,
+		Posts:    result.Posts,
+	}
+
+	return userReponse
+}
+
+// FindByUsername implements UserService.
+func (u *UserServiceImpl) FindByUsername(username string) response.UserResponse {
+	result, err := u.UserRepository.FindByUsername(username)
+	helper.ErrorPanic(err)
+
+	userReponse := response.UserResponse{
+		ID:       int(result.ID),
+		Name:     result.Name,
+		Username: result.Username,
+		Age:      int(result.Age),
+		Email:    result.Email,
+		Phone:    result.Phone,
+		Tags:     result.Tags,
+		Posts:    result.Posts,
 	}
 
 	return userReponse
@@ -51,19 +108,20 @@ func (u *UserServiceImpl) Delete(UserId int) {
 
 // FindAll implements UserService.
 func (u *UserServiceImpl) FindAll() []response.UserResponse {
-	var users []response.UserResponse
+	var users = []response.UserResponse{}
 	result, err := u.UserRepository.FindAll()
 	helper.ErrorPanic(err)
 
 	for _, v := range result {
 		found := response.UserResponse{
-			ID:       v.ID,
+			ID:       int(v.ID),
 			Name:     v.Name,
 			Username: v.Username,
-			Age:      v.Age,
+			Age:      int(v.Age),
 			Email:    v.Email,
 			Phone:    v.Phone,
 			Tags:     v.Tags,
+			Posts:    v.Posts,
 		}
 
 		users = append(users, found)
@@ -78,13 +136,14 @@ func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
 	helper.ErrorPanic(err)
 
 	userReponse := response.UserResponse{
-		ID:       result.ID,
+		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
-		Age:      result.Age,
+		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
 		Tags:     result.Tags,
+		Posts:    result.Posts,
 	}
 
 	return userReponse
@@ -97,7 +156,7 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.UserRe
 
 	found.Name = user.Name
 	// found.Username = user.Username
-	found.Age = user.Age
+	found.Age = uint(user.Age)
 	found.Email = user.Email
 	found.Phone = user.Phone
 
@@ -105,13 +164,14 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.UserRe
 	helper.ErrorPanic(resultErr)
 
 	userReponse := response.UserResponse{
-		ID:       result.ID,
+		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
-		Age:      result.Age,
+		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
 		Tags:     result.Tags,
+		Posts:    result.Posts,
 	}
 
 	return userReponse

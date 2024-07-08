@@ -26,11 +26,10 @@ func (t *TagRepositoryImpl) Delete(tagId int) {
 }
 
 // FindAll implements TagRepository.
-func (t *TagRepositoryImpl) FindAll() []model.Tag {
-	var tags []model.Tag
-	result := t.Db.Find(&tags)
-	helper.ErrorPanic(result.Error)
-	return tags
+func (t *TagRepositoryImpl) FindAll() (tags []model.Tag, err error) {
+	var tagList []model.Tag
+	err = t.Db.Model(&model.Tag{}).Find(&tagList).Error
+	return tagList, err
 }
 
 // FindById implements TagRepository.
@@ -53,20 +52,20 @@ func (t *TagRepositoryImpl) Save(tag model.Tag) (tg model.Tag, err error) {
 	result := t.Db.Create(&tag)
 	helper.ErrorPanic(result.Error)
 
-	return t.FindById(tag.ID)
+	return t.FindById(int(tag.ID))
 }
 
 // Update implements TagRepository.
 func (t *TagRepositoryImpl) Update(tag model.Tag) (tg model.Tag, err error) {
 	var updateTag = request.UpdateTagRequest{
-		ID:   tag.ID,
+		ID:   int(tag.ID),
 		Name: tag.Name,
 	}
 
 	result := t.Db.Model(&tag).Updates(updateTag)
 	helper.ErrorPanic(result.Error)
 
-	return t.FindById(tag.ID)
+	return t.FindById(int(tag.ID))
 }
 
 func NewTagRepositoryImpl(Db *gorm.DB) TagRepository {
