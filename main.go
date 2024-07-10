@@ -109,6 +109,9 @@ func main() {
 		MaxAge: 24 * time.Hour,
 	}))
 
+	uploadRouter := apiVersion1.Group("/upload")
+	uploadRouter.POST("/", controller.UploadFile)
+
 	postRouter := apiVersion1.Group("/posts")
 	postRouter.GET("/", postController.FindAll)
 	postRouter.GET("/:postId", postController.FindById)
