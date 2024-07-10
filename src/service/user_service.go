@@ -6,11 +6,11 @@ import (
 )
 
 type UserService interface {
-	Login(user request.LoginUserRequest) response.UserResponse
-	FindByUsername(username string) response.UserResponse
-	Create(user request.CreateUserRequest) response.UserResponse
-	Update(user request.UpdateUserRequest) response.UserResponse
+	Login(user request.LoginUserRequest) (userdata response.UserResponse, err error)
+	FindByUsername(username string) (userdata response.UserResponse, err error)
+	Create(user request.CreateUserRequest) (userdata response.UserResponse, err error)
+	Update(id int, user request.UpdateUserRequest) (userdata response.UserResponse, err error)
 	Delete(userId int)
-	FindById(userId int) response.UserResponse
-	FindAll() []response.UserResponse
+	FindById(userId int) (userdata response.UserResponse, err error)
+	FindAll() (userdata []response.UserResponse, err error)
 }

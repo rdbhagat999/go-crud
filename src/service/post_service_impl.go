@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
-	"go-crud/src/helper"
 	"go-crud/src/model"
 	"go-crud/src/repository"
 
@@ -16,11 +15,19 @@ type PostServiceImpl struct {
 	Validate       *validator.Validate
 }
 
+func postServicePrintln(err error) {
+	fmt.Println("postServicePrintln: " + err.Error())
+}
+
 // Create implements PostService.
-func (p *PostServiceImpl) Create(post request.CreatePostRequest) response.PostResponse {
-	err := p.Validate.Struct(post)
-	fmt.Println(err.Error())
-	helper.ErrorPanic(err)
+func (p *PostServiceImpl) Create(post request.CreatePostRequest) (postdata response.PostResponse, err error) {
+	validateErr := p.Validate.Struct(post)
+	// helper.ErrorPanic(validateErr)
+
+	if validateErr != nil {
+		postServicePrintln(validateErr)
+		return response.PostResponse{}, validateErr
+	}
 
 	postModel := model.Post{
 		Title:  post.Title,
@@ -29,8 +36,11 @@ func (p *PostServiceImpl) Create(post request.CreatePostRequest) response.PostRe
 	}
 
 	result, resultErr := p.PostRepository.Save(postModel)
-
-	helper.ErrorPanic(resultErr)
+	// helper.ErrorPanic(resultErr)
+	if resultErr != nil {
+		postServicePrintln(resultErr)
+		return response.PostResponse{}, resultErr
+	}
 
 	postReponse := response.PostResponse{
 		ID:     int(result.ID),
@@ -39,7 +49,7 @@ func (p *PostServiceImpl) Create(post request.CreatePostRequest) response.PostRe
 		UserID: int(result.UserID),
 	}
 
-	return postReponse
+	return postReponse, nil
 }
 
 // Delete implements PostService.
@@ -48,11 +58,16 @@ func (p *PostServiceImpl) Delete(postId int) {
 }
 
 // FindAll implements PostService.
-func (p *PostServiceImpl) FindAll() []response.PostResponse {
+func (p *PostServiceImpl) FindAll() (postList []response.PostResponse, err error) {
 	var posts = []response.PostResponse{}
-	result, err := p.PostRepository.FindAll()
-	fmt.Println(err.Error())
-	helper.ErrorPanic(err)
+
+	result, resultErr := p.PostRepository.FindAll()
+	// helper.ErrorPanic(resultErr)
+
+	if resultErr != nil {
+		postServicePrintln(resultErr)
+		return posts, resultErr
+	}
 
 	for _, v := range result {
 		found := response.PostResponse{
@@ -65,39 +80,58 @@ func (p *PostServiceImpl) FindAll() []response.PostResponse {
 		posts = append(posts, found)
 	}
 
-	return posts
+	return posts, nil
 }
 
 // FindById implements PostService.
-func (p *PostServiceImpl) FindById(postId int) response.PostResponse {
-	result, err := p.PostRepository.FindById(postId)
-	fmt.Println(err.Error())
-	helper.ErrorPanic(err)
+func (p *PostServiceImpl) FindById(postId int) (postdata response.PostResponse, err error) {
+	var postReponse response.PostResponse
 
-	postReponse := response.PostResponse{
+	result, findErr := p.PostRepository.FindById(postId)
+	// helper.ErrorPanic(findErr)
+
+	if findErr != nil {
+		postServicePrintln(findErr)
+		return postReponse, findErr
+	}
+
+	postReponse = response.PostResponse{
 		ID:     int(result.ID),
 		Title:  result.Title,
 		Body:   result.Body,
 		UserID: int(result.UserID),
 	}
 
-	return postReponse
+	return postReponse, nil
 }
 
 // Update implements PostService.
-func (p *PostServiceImpl) Update(post request.UpdatePostRequest) response.PostResponse {
-	err := p.Validate.Struct(post)
-	fmt.Println(err.Error())
+func (p *PostServiceImpl) Update(id int, post request.UpdatePostRequest) (postdata response.PostResponse, err error) {
+	updateErr := p.Validate.Struct(post)
 
-	found, foundErr := p.PostRepository.FindById(post.ID)
-	fmt.Println(foundErr.Error())
-	helper.ErrorPanic(foundErr)
+	if updateErr != nil {
+		postServicePrintln(updateErr)
+		return response.PostResponse{}, updateErr
+	}
 
+	found, foundErr := p.PostRepository.FindById(id)
+	// helper.ErrorPanic(foundErr)
+
+	if foundErr != nil {
+		postServicePrintln(foundErr)
+		return response.PostResponse{}, foundErr
+	}
+
+	found.ID = uint(id)
 	found.Title = post.Title
 	found.Body = post.Body
 
 	result, resultErr := p.PostRepository.Update(found)
-	helper.ErrorPanic(resultErr)
+	// helper.ErrorPanic(resultErr)
+	if resultErr != nil {
+		postServicePrintln(resultErr)
+		return response.PostResponse{}, resultErr
+	}
 
 	postReponse := response.PostResponse{
 		ID:     int(result.ID),
@@ -106,7 +140,7 @@ func (p *PostServiceImpl) Update(post request.UpdatePostRequest) response.PostRe
 		UserID: int(result.UserID),
 	}
 
-	return postReponse
+	return postReponse, nil
 }
 
 func NewPostServiceImpl(postRepository repository.PostRepository, validate *validator.Validate) PostService {
