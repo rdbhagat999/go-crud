@@ -1,15 +1,20 @@
 basePath: /api/v1
 definitions:
-  request.CreateTagRequest:
+  request.CreatePostRequest:
     properties:
-      name:
-        maxLength: 200
+      body:
+        maxLength: 255
+        minLength: 5
+        type: string
+      title:
+        maxLength: 255
         minLength: 5
         type: string
       user_id:
         type: integer
     required:
-    - name
+    - body
+    - title
     - user_id
     type: object
   request.CreateUserRequest:
@@ -26,6 +31,10 @@ definitions:
         maxLength: 200
         minLength: 5
         type: string
+      password:
+        maxLength: 255
+        minLength: 5
+        type: string
       phone:
         maxLength: 15
         minLength: 10
@@ -38,25 +47,42 @@ definitions:
     - age
     - email
     - name
+    - password
     - phone
     - username
     type: object
-  request.UpdateTagRequest:
+  request.LoginUserRequest:
     properties:
-      id:
-        type: integer
-      name:
+      password:
+        maxLength: 255
+        minLength: 5
+        type: string
+      username:
         maxLength: 200
         minLength: 5
         type: string
     required:
-    - id
-    - name
+    - password
+    - username
+    type: object
+  request.UpdatePostRequest:
+    properties:
+      body:
+        maxLength: 255
+        minLength: 5
+        type: string
+      title:
+        description: ID    int    `validate:"required" json:"post_id"`
+        maxLength: 255
+        minLength: 5
+        type: string
+    required:
+    - body
+    - title
     type: object
   request.UpdateUserRequest:
     properties:
       age:
-        description: Username string `validate:"required,min=5,max=200" json:"username"`
         maximum: 60
         minimum: 18
         type: integer
@@ -65,6 +91,7 @@ definitions:
         minLength: 5
         type: string
       name:
+        description: ID    int    `validate:"required" json:"user_id"`
         maxLength: 200
         minLength: 5
         type: string
@@ -72,14 +99,11 @@ definitions:
         maxLength: 15
         minLength: 10
         type: string
-      user_id:
-        type: integer
     required:
     - age
     - email
     - name
     - phone
-    - user_id
     type: object
   response.Response:
     properties:
@@ -94,13 +118,15 @@ definitions:
 host: localhost:8888
 info:
   contact: {}
-  description: A Tag Service API in Golang using Gin Framework
-  title: Tag Service API
+  description: A demo Service API in Golang using Gin Framework
+  title: Demo Service API
   version: 1.0.0
 paths:
-  /tags:
+  /posts:
     get:
-      description: Returns a list of tags
+      consumes:
+      - application/json
+      description: Returns a list of post
       produces:
       - application/json
       responses:
@@ -108,16 +134,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Get all tags
+      summary: Get all post
     post:
-      description: Save tag in database
+      consumes:
+      - application/json
+      description: Save post in database
       parameters:
-      - description: Create tag
+      - description: Create post
         in: body
-        name: tag
+        name: post
         required: true
         schema:
-          $ref: '#/definitions/request.CreateTagRequest'
+          $ref: '#/definitions/request.CreatePostRequest'
       produces:
       - application/json
       responses:
@@ -125,14 +153,16 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Create tag
-  /tags/{tagId}:
+      summary: Create post
+  /posts/{postId}:
     delete:
-      description: Delete tag from database
+      consumes:
+      - application/json
+      description: Delete post from database
       parameters:
-      - description: Delete tag by id
+      - description: Delete post by id
         in: path
-        name: tagId
+        name: postId
         required: true
         type: string
       produces:
@@ -142,13 +172,15 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Delete tag
+      summary: Delete post
     get:
-      description: Returns a single tag when tagId maches id
+      consumes:
+      - application/json
+      description: Returns a single post when postId maches id
       parameters:
-      - description: Find tag by id
+      - description: Find post by id
         in: path
-        name: tagId
+        name: postId
         required: true
         type: string
       produces:
@@ -158,21 +190,23 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Get a single tag by its id
+      summary: Get a single post by its id
     put:
-      description: Update and save tag in database
+      consumes:
+      - application/json
+      description: Update and save post in database
       parameters:
-      - description: Update tag by id
+      - description: Update post by id
         in: path
-        name: tagId
+        name: postId
         required: true
         type: string
-      - description: Update tag
+      - description: Update post
         in: body
-        name: tag
+        name: post
         required: true
         schema:
-          $ref: '#/definitions/request.UpdateTagRequest'
+          $ref: '#/definitions/request.UpdatePostRequest'
       produces:
       - application/json
       responses:
@@ -180,9 +214,11 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Update tag
+      summary: Update post
   /users:
     get:
+      consumes:
+      - application/json
       description: Returns a list of users
       produces:
       - application/json
@@ -193,6 +229,8 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: Get all users
     post:
+      consumes:
+      - application/json
       description: Save user in database
       parameters:
       - description: Create user
@@ -211,6 +249,8 @@ paths:
       summary: Create user
   /users/{userId}:
     delete:
+      consumes:
+      - application/json
       description: Delete user from database
       parameters:
       - description: Delete user by id
@@ -227,6 +267,8 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: Delete user
     get:
+      consumes:
+      - application/json
       description: Returns a single user when userId maches id
       parameters:
       - description: Find user by id
@@ -243,6 +285,8 @@ paths:
             $ref: '#/definitions/response.Response'
       summary: Get a single user by its id
     put:
+      consumes:
+      - application/json
       description: Update and save user in database
       parameters:
       - description: Update user by id
@@ -264,4 +308,50 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update user
+  /users/Logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user in database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Logout authenticated user
+  /users/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user in database
+      parameters:
+      - description: Login user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.LoginUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Login user
+  /users/user:
+    post:
+      consumes:
+      - application/json
+      description: Get user in database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get authenticated user
 swagger: "2.0"

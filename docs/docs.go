@@ -15,13 +15,16 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/tags": {
+        "/posts": {
             "get": {
-                "description": "Returns a list of tags",
+                "description": "Returns a list of post",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get all tags",
+                "summary": "Get all post",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -32,19 +35,22 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Save tag in database",
+                "description": "Save post in database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Create tag",
+                "summary": "Create post",
                 "parameters": [
                     {
-                        "description": "Create tag",
-                        "name": "tag",
+                        "description": "Create post",
+                        "name": "post",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.CreateTagRequest"
+                            "$ref": "#/definitions/request.CreatePostRequest"
                         }
                     }
                 ],
@@ -58,18 +64,21 @@ const docTemplate = `{
                 }
             }
         },
-        "/tags/{tagId}": {
+        "/posts/{postId}": {
             "get": {
-                "description": "Returns a single tag when tagId maches id",
+                "description": "Returns a single post when postId maches id",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get a single tag by its id",
+                "summary": "Get a single post by its id",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Find tag by id",
-                        "name": "tagId",
+                        "description": "Find post by id",
+                        "name": "postId",
                         "in": "path",
                         "required": true
                     }
@@ -84,26 +93,29 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Update and save tag in database",
+                "description": "Update and save post in database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Update tag",
+                "summary": "Update post",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Update tag by id",
-                        "name": "tagId",
+                        "description": "Update post by id",
+                        "name": "postId",
                         "in": "path",
                         "required": true
                     },
                     {
-                        "description": "Update tag",
-                        "name": "tag",
+                        "description": "Update post",
+                        "name": "post",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.UpdateTagRequest"
+                            "$ref": "#/definitions/request.UpdatePostRequest"
                         }
                     }
                 ],
@@ -117,16 +129,19 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete tag from database",
+                "description": "Delete post from database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Delete tag",
+                "summary": "Delete post",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Delete tag by id",
-                        "name": "tagId",
+                        "description": "Delete post by id",
+                        "name": "postId",
                         "in": "path",
                         "required": true
                     }
@@ -144,6 +159,9 @@ const docTemplate = `{
         "/users": {
             "get": {
                 "description": "Returns a list of users",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -159,6 +177,9 @@ const docTemplate = `{
             },
             "post": {
                 "description": "Save user in database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -184,9 +205,83 @@ const docTemplate = `{
                 }
             }
         },
+        "/users/Logout": {
+            "post": {
+                "description": "Logout user in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Logout authenticated user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "description": "Login user in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Login user",
+                "parameters": [
+                    {
+                        "description": "Login user",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.LoginUserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/user": {
+            "post": {
+                "description": "Get user in database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get authenticated user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/users/{userId}": {
             "get": {
                 "description": "Returns a single user when userId maches id",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -211,6 +306,9 @@ const docTemplate = `{
             },
             "put": {
                 "description": "Update and save user in database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -244,6 +342,9 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "Delete user from database",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -269,16 +370,22 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "request.CreateTagRequest": {
+        "request.CreatePostRequest": {
             "type": "object",
             "required": [
-                "name",
+                "body",
+                "title",
                 "user_id"
             ],
             "properties": {
-                "name": {
+                "body": {
                     "type": "string",
-                    "maxLength": 200,
+                    "maxLength": 255,
+                    "minLength": 5
+                },
+                "title": {
+                    "type": "string",
+                    "maxLength": 255,
                     "minLength": 5
                 },
                 "user_id": {
@@ -292,6 +399,7 @@ const docTemplate = `{
                 "age",
                 "email",
                 "name",
+                "password",
                 "phone",
                 "username"
             ],
@@ -311,6 +419,11 @@ const docTemplate = `{
                     "maxLength": 200,
                     "minLength": 5
                 },
+                "password": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 5
+                },
                 "phone": {
                     "type": "string",
                     "maxLength": 15,
@@ -323,19 +436,41 @@ const docTemplate = `{
                 }
             }
         },
-        "request.UpdateTagRequest": {
+        "request.LoginUserRequest": {
             "type": "object",
             "required": [
-                "id",
-                "name"
+                "password",
+                "username"
             ],
             "properties": {
-                "id": {
-                    "type": "integer"
+                "password": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 5
                 },
-                "name": {
+                "username": {
                     "type": "string",
                     "maxLength": 200,
+                    "minLength": 5
+                }
+            }
+        },
+        "request.UpdatePostRequest": {
+            "type": "object",
+            "required": [
+                "body",
+                "title"
+            ],
+            "properties": {
+                "body": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 5
+                },
+                "title": {
+                    "description": "ID    int    ` + "`" + `validate:\"required\" json:\"post_id\"` + "`" + `",
+                    "type": "string",
+                    "maxLength": 255,
                     "minLength": 5
                 }
             }
@@ -346,12 +481,10 @@ const docTemplate = `{
                 "age",
                 "email",
                 "name",
-                "phone",
-                "user_id"
+                "phone"
             ],
             "properties": {
                 "age": {
-                    "description": "Username string ` + "`" + `validate:\"required,min=5,max=200\" json:\"username\"` + "`" + `",
                     "type": "integer",
                     "maximum": 60,
                     "minimum": 18
@@ -362,6 +495,7 @@ const docTemplate = `{
                     "minLength": 5
                 },
                 "name": {
+                    "description": "ID    int    ` + "`" + `validate:\"required\" json:\"user_id\"` + "`" + `",
                     "type": "string",
                     "maxLength": 200,
                     "minLength": 5
@@ -370,9 +504,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 15,
                     "minLength": 10
-                },
-                "user_id": {
-                    "type": "integer"
                 }
             }
         },
@@ -400,8 +531,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8888",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "Tag Service API",
-	Description:      "A Tag Service API in Golang using Gin Framework",
+	Title:            "Demo Service API",
+	Description:      "A demo Service API in Golang using Gin Framework",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

@@ -13,6 +13,7 @@ func NewRouter() (*gin.Engine, *gin.RouterGroup) {
 	// router.Use(gin.Logger())
 
 	// adds Swagger
+	// http://localhost:8888/docs/index.html
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.GET("/", func(ctx *gin.Context) {
