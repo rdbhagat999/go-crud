@@ -30,7 +30,8 @@ func postControllerPrintln(err error) {
 // @Summary  Create post
 // @Description  Save post in database
 // @Param  post body request.CreatePostRequest true "Create post"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Post  post
 // @Success  200 {object} response.Response{}
 // @Router  /posts [POST]
@@ -73,7 +74,8 @@ func (controller *PostController) Create(ctx *gin.Context) {
 // @Description  Update and save post in database
 // @Param  postId path string true "Update post by id"
 // @Param  post body request.UpdatePostRequest true "Update post"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Post  post
 // @Success  200 {object} response.Response{}
 // @Router  /posts/{postId} [PUT]
@@ -135,7 +137,8 @@ func (controller *PostController) Update(ctx *gin.Context) {
 // @Summary  Delete post
 // @Description  Delete post from database
 // @Param  postId path string true "Delete post by id"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Post  post
 // @Success  200 {object} response.Response{}
 // @Router  /posts/{postId} [DELETE]
@@ -177,7 +180,8 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 // @Summary  Get a single post by its id
 // @Description  Returns a single post when postId maches id
 // @Param  postId path string true "Find post by id"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Post  post
 // @Success  200 {object} response.Response{}
 // @Router  /posts/{postId} [GET]
@@ -247,8 +251,9 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 
 // FindAllPost godoc
 // @Summary  Get all post
-// @Description  Returns a list of post
-// @Produce  application/json
+// @Description Returns a list of post
+// @Accept json
+// @Produce  json
 // @Post  post
 // @Success  200 {object} response.Response{}
 // @Router  /posts [GET]

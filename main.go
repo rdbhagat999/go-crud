@@ -57,9 +57,9 @@ func triggerPanic() {
 	panic("This is a Panic message")
 }
 
-// @title Tag Service API
+// @title Demo Service API
 // @version 1.0.0
-// @description A Tag Service API in Golang using Gin Framework
+// @description A demo Service API in Golang using Gin Framework
 
 // @host localhost:8888
 // @BasePath /api/v1

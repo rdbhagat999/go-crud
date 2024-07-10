@@ -33,7 +33,8 @@ func NewUserController(service service.UserService) *UserController {
 // @Summary  Create user
 // @Description  Save user in database
 // @Param  user body request.CreateUserRequest true "Create user"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users [POST]
@@ -75,8 +76,8 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // AuthUser godoc
 // @Summary  Get authenticated user
 // @Description  Get user in database
-// @Param
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users/user [POST]
@@ -201,8 +202,8 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 // Logout godoc
 // @Summary  Logout authenticated user
 // @Description  Logout user in database
-// @Param
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users/Logout [POST]
@@ -225,7 +226,8 @@ func (controller *UserController) Logout(ctx *gin.Context) {
 // @Summary  Login user
 // @Description  Login user in database
 // @Param  user body request.LoginUserRequest true "Login user"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users/login [POST]
@@ -296,7 +298,8 @@ func (controller *UserController) Login(ctx *gin.Context) {
 // @Description  Update and save user in database
 // @Param  userId path string true "Update user by id"
 // @Param  user body request.UpdateUserRequest true "Update user"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users/{userId} [PUT]
@@ -360,7 +363,8 @@ func (controller *UserController) Update(ctx *gin.Context) {
 // @Summary  Delete user
 // @Description  Delete user from database
 // @Param  userId path string true "Delete user by id"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users/{userId} [DELETE]
@@ -402,7 +406,8 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 // @Summary  Get a single user by its id
 // @Description  Returns a single user when userId maches id
 // @Param  userId path string true "Find user by id"
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users/{userId} [GET]
@@ -473,7 +478,8 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 // FindAllUser godoc
 // @Summary  Get all users
 // @Description  Returns a list of users
-// @Produce  application/json
+// @Accept json
+// @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
 // @Router  /users [GET]
