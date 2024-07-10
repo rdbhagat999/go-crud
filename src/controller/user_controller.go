@@ -19,6 +19,10 @@ type UserController struct {
 	UserService service.UserService
 }
 
+func userControllerPrintln(err error) {
+	fmt.Println("userControllerPrintln: " + err.Error())
+}
+
 func NewUserController(service service.UserService) *UserController {
 	return &UserController{
 		UserService: service,
@@ -38,7 +42,24 @@ func (controller *UserController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	helper.ErrorPanic(err)
 
-	user := controller.UserService.Create(createUserRequest)
+	user, createErr := controller.UserService.Create(createUserRequest)
+
+	if createErr != nil {
+
+		userControllerPrintln(createErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: createErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
@@ -68,7 +89,7 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 	// helper.ErrorPanic(cookieError)
 
 	if cookieError != nil {
-		fmt.Println(cookieError.Error())
+		userControllerPrintln(cookieError)
 
 		webResponse = response.Response{
 			Code:    http.StatusBadRequest,
@@ -79,6 +100,7 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -87,8 +109,9 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 	})
 
 	if parseErr != nil {
-		fmt.Println(parseErr.Error())
+		userControllerPrintln(parseErr)
 		// helper.ErrorPanic(parseErr)
+
 		webResponse = response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  http.StatusText(http.StatusBadRequest),
@@ -145,7 +168,24 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 
 	}
 
-	user := controller.UserService.FindByUsername(username)
+	user, userErr := controller.UserService.FindByUsername(username)
+
+	if userErr != nil {
+		userControllerPrintln(userErr)
+		// helper.ErrorPanic(userErr)
+
+		webResponse = response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: userErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
 
 	webResponse = response.Response{
 		Code:   http.StatusOK,
@@ -194,7 +234,23 @@ func (controller *UserController) Login(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&loginUserRequest)
 	helper.ErrorPanic(err)
 
-	user := controller.UserService.Login(loginUserRequest)
+	user, userErr := controller.UserService.Login(loginUserRequest)
+
+	if userErr != nil {
+		userControllerPrintln(userErr)
+		// helper.ErrorPanic(userErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: userErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		// Also fixed dates can be used for the NumericDate
@@ -204,7 +260,23 @@ func (controller *UserController) Login(ctx *gin.Context) {
 	})
 
 	tokenString, tokenErr := token.SignedString([]byte(os.Getenv("TOKEN_SECRET")))
-	helper.ErrorPanic(tokenErr)
+	// helper.ErrorPanic(tokenErr)
+
+	if tokenErr != nil {
+		userControllerPrintln(tokenErr)
+		// helper.ErrorPanic(tokenErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: tokenErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
 
 	ctx.SetCookie("jwt", tokenString, time.Now().Add(time.Hour*24).Second(), "/", "", false, true)
 
@@ -234,12 +306,44 @@ func (controller *UserController) Update(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 
 	userId := ctx.Param("userId")
-	id, errr := strconv.Atoi(userId)
-	helper.ErrorPanic(errr)
+	id, paramErr := strconv.Atoi(userId)
+	// helper.ErrorPanic(paramErr)
 
-	updateUserRequest.ID = id
+	if paramErr != nil {
+		userControllerPrintln(paramErr)
+		// helper.ErrorPanic(paramErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: paramErr.Error(),
+		}
 
-	user := controller.UserService.Update(updateUserRequest)
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
+
+	// updateUserRequest.ID = id
+
+	user, userErr := controller.UserService.Update(id, updateUserRequest)
+
+	if userErr != nil {
+		userControllerPrintln(userErr)
+		// helper.ErrorPanic(userErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: userErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
@@ -262,8 +366,24 @@ func (controller *UserController) Update(ctx *gin.Context) {
 // @Router  /users/{userId} [DELETE]
 func (controller *UserController) Delete(ctx *gin.Context) {
 	userId := ctx.Param("userId")
-	id, errr := strconv.Atoi(userId)
-	helper.ErrorPanic(errr)
+	id, paramErr := strconv.Atoi(userId)
+	helper.ErrorPanic(paramErr)
+
+	if paramErr != nil {
+		userControllerPrintln(paramErr)
+		// helper.ErrorPanic(paramErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: paramErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
 
 	controller.UserService.Delete(id)
 
@@ -288,10 +408,56 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 // @Router  /users/{userId} [GET]
 func (controller *UserController) FindById(ctx *gin.Context) {
 	userId := ctx.Param("userId")
-	id, err := strconv.Atoi(userId)
-	helper.ErrorPanic(err)
+	id, paramErr := strconv.Atoi(userId)
+	// helper.ErrorPanic(paramErr)
 
-	user := controller.UserService.FindById(id)
+	if paramErr != nil {
+		userControllerPrintln(paramErr)
+		// helper.ErrorPanic(paramErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: paramErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
+
+	user, userErr := controller.UserService.FindById(id)
+
+	if userErr != nil {
+		userControllerPrintln(userErr)
+		// helper.ErrorPanic(userErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: userErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
+
+	if user.ID == 0 {
+
+		webResponse := response.Response{
+			Code:    http.StatusNotFound,
+			Status:  http.StatusText(http.StatusNotFound),
+			Data:    nil,
+			Message: "user not found",
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusNotFound, webResponse)
+		return
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
@@ -312,7 +478,23 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /users [GET]
 func (controller *UserController) FindAll(ctx *gin.Context) {
-	users := controller.UserService.FindAll()
+	users, usersErr := controller.UserService.FindAll()
+
+	if usersErr != nil {
+		userControllerPrintln(usersErr)
+		// helper.ErrorPanic(usersErr)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: usersErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		return
+
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,

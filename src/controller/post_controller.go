@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
@@ -21,6 +22,10 @@ func NewPostController(service service.PostService) *PostController {
 	}
 }
 
+func postControllerPrintln(err error) {
+	fmt.Println("postControllerPrintln: " + err.Error())
+}
+
 // CreatePost godoc
 // @Summary  Create post
 // @Description  Save post in database
@@ -34,7 +39,23 @@ func (controller *PostController) Create(ctx *gin.Context) {
 	err := ctx.ShouldBindJSON(&createPostRequest)
 	helper.ErrorPanic(err)
 
-	post := controller.PostService.Create(createPostRequest)
+	post, createErr := controller.PostService.Create(createPostRequest)
+
+	if createErr != nil {
+		postControllerPrintln(createErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: createErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
@@ -62,12 +83,42 @@ func (controller *PostController) Update(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 
 	postId := ctx.Param("postId")
-	id, errr := strconv.Atoi(postId)
-	helper.ErrorPanic(errr)
+	id, paramErr := strconv.Atoi(postId)
+	// helper.ErrorPanic(paramErr)
 
-	updatePostRequest.ID = id
+	if paramErr != nil {
+		postControllerPrintln(paramErr)
 
-	post := controller.PostService.Update(updatePostRequest)
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: paramErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
+
+	post, updateErr := controller.PostService.Update(id, updatePostRequest)
+
+	if updateErr != nil {
+		postControllerPrintln(updateErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: updateErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
@@ -90,8 +141,24 @@ func (controller *PostController) Update(ctx *gin.Context) {
 // @Router  /posts/{postId} [DELETE]
 func (controller *PostController) Delete(ctx *gin.Context) {
 	postId := ctx.Param("postId")
-	id, errr := strconv.Atoi(postId)
-	helper.ErrorPanic(errr)
+	id, paramErr := strconv.Atoi(postId)
+	// helper.ErrorPanic(paramErr)
+
+	if paramErr != nil {
+		postControllerPrintln(paramErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: paramErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
 
 	controller.PostService.Delete(id)
 
@@ -116,10 +183,56 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 // @Router  /posts/{postId} [GET]
 func (controller *PostController) FindById(ctx *gin.Context) {
 	postId := ctx.Param("postId")
-	id, err := strconv.Atoi(postId)
-	helper.ErrorPanic(err)
+	id, paramErr := strconv.Atoi(postId)
+	// helper.ErrorPanic(err)
 
-	post := controller.PostService.FindById(id)
+	if paramErr != nil {
+		postControllerPrintln(paramErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: paramErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
+
+	post, findErr := controller.PostService.FindById(id)
+
+	if findErr != nil {
+		postControllerPrintln(findErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: findErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
+
+	if post.ID == 0 {
+
+		webResponse := response.Response{
+			Code:    http.StatusNotFound,
+			Status:  http.StatusText(http.StatusNotFound),
+			Data:    nil,
+			Message: "post not found",
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusNotFound, webResponse)
+		return
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
@@ -140,7 +253,23 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /posts [GET]
 func (controller *PostController) FindAll(ctx *gin.Context) {
-	posts := controller.PostService.FindAll()
+	posts, listErr := controller.PostService.FindAll()
+
+	if listErr != nil {
+		postControllerPrintln(listErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: listErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+
+		return
+	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,

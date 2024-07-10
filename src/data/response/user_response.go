@@ -9,7 +9,6 @@ type UserResponse struct {
 	Age      int          `json:"age"`
 	Email    string       `json:"email"`
 	Phone    string       `json:"phone"`
-	Tags     []model.Tag  `json:"tags"`
 	Posts    []model.Post `json:"posts"`
 }
 

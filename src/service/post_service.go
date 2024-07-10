@@ -6,9 +6,9 @@ import (
 )
 
 type PostService interface {
-	Create(post request.CreatePostRequest) response.PostResponse
-	Update(post request.UpdatePostRequest) response.PostResponse
+	Create(post request.CreatePostRequest) (postdata response.PostResponse, err error)
+	Update(id int, post request.UpdatePostRequest) (postdata response.PostResponse, err error)
 	Delete(postId int)
-	FindById(postId int) response.PostResponse
-	FindAll() []response.PostResponse
+	FindById(postId int) (postdata response.PostResponse, err error)
+	FindAll() (postList []response.PostResponse, err error)
 }

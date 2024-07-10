@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
-	"go-crud/src/helper"
 	"go-crud/src/model"
 	"go-crud/src/repository"
 
@@ -18,14 +17,30 @@ type UserServiceImpl struct {
 	Validate       *validator.Validate
 }
 
+func userServicePrintln(err error) {
+	fmt.Println("userServicePrintln: " + err.Error())
+}
+
 // Create implements UserService.
-func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserResponse {
-	err := u.Validate.Struct(user)
-	fmt.Println(err.Error())
-	helper.ErrorPanic(err)
+func (u *UserServiceImpl) Create(user request.CreateUserRequest) (userdata response.UserResponse, err error) {
+	var userReponse response.UserResponse
+
+	validateErr := u.Validate.Struct(user)
+	// helper.ErrorPanic(err)
+
+	if validateErr != nil {
+		userServicePrintln(validateErr)
+		//  validateErr.(validator.ValidationErrors)
+		return userReponse, validateErr
+	}
 
 	password, passErr := bcrypt.GenerateFromPassword([]byte(user.Password), 15)
-	helper.ErrorPanic(passErr)
+	// helper.ErrorPanic(passErr)
+
+	if passErr != nil {
+		userServicePrintln(passErr)
+		return userReponse, passErr
+	}
 
 	userModel := model.User{
 		Name:     user.Name,
@@ -37,68 +52,93 @@ func (u *UserServiceImpl) Create(user request.CreateUserRequest) response.UserRe
 	}
 
 	result, resultErr := u.UserRepository.Save(userModel)
-	helper.ErrorPanic(resultErr)
+	// helper.ErrorPanic(resultErr)
 
-	userReponse := response.UserResponse{
+	if resultErr != nil {
+		userServicePrintln(resultErr)
+		return userReponse, resultErr
+	}
+
+	userReponse = response.UserResponse{
 		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
 		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
-		Tags:     result.Tags,
 		Posts:    result.Posts,
 	}
 
-	return userReponse
+	return userReponse, nil
 }
 
-// Create implements UserService.
-func (u *UserServiceImpl) Login(user request.LoginUserRequest) response.UserResponse {
-	err := u.Validate.Struct(user)
-	fmt.Println(err.Error())
-	helper.ErrorPanic(err)
+// Login implements UserService.
+func (u *UserServiceImpl) Login(user request.LoginUserRequest) (userdata response.UserResponse, err error) {
+	var userReponse response.UserResponse
+
+	validateErr := u.Validate.Struct(user)
+	// helper.ErrorPanic(validateErr)
+
+	if validateErr != nil {
+		userServicePrintln(validateErr)
+		return userReponse, validateErr
+	}
 
 	result, loginErr := u.UserRepository.Login(user)
-	helper.ErrorPanic(loginErr)
+	// helper.ErrorPanic(loginErr)
+
+	if loginErr != nil {
+		userServicePrintln(loginErr)
+		return userReponse, loginErr
+	}
 
 	compareErr := bcrypt.CompareHashAndPassword(result.Password, []byte(user.Password))
-	helper.ErrorPanic(compareErr)
+	// helper.ErrorPanic(compareErr)
+
+	if compareErr != nil {
+		userServicePrintln(compareErr)
+		return userReponse, compareErr
+	}
 
 	// loadConfig, loadConfigErr := config.LoadConfig("../../app.env")
 	// helper.ErrorPanic(loadConfigErr)
 
-	userReponse := response.UserResponse{
+	userReponse = response.UserResponse{
 		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
 		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
-		Tags:     result.Tags,
 		Posts:    result.Posts,
 	}
 
-	return userReponse
+	return userReponse, nil
 }
 
 // FindByUsername implements UserService.
-func (u *UserServiceImpl) FindByUsername(username string) response.UserResponse {
-	result, err := u.UserRepository.FindByUsername(username)
-	helper.ErrorPanic(err)
+func (u *UserServiceImpl) FindByUsername(username string) (userdata response.UserResponse, err error) {
+	var userReponse response.UserResponse
 
-	userReponse := response.UserResponse{
+	result, err := u.UserRepository.FindByUsername(username)
+	// helper.ErrorPanic(err)
+
+	if err != nil {
+		userServicePrintln(err)
+		return userReponse, err
+	}
+
+	userReponse = response.UserResponse{
 		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
 		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
-		Tags:     result.Tags,
 		Posts:    result.Posts,
 	}
 
-	return userReponse
+	return userReponse, nil
 }
 
 // Delete implements UserService.
@@ -107,10 +147,16 @@ func (u *UserServiceImpl) Delete(UserId int) {
 }
 
 // FindAll implements UserService.
-func (u *UserServiceImpl) FindAll() []response.UserResponse {
+func (u *UserServiceImpl) FindAll() (userList []response.UserResponse, err error) {
+
 	var users = []response.UserResponse{}
 	result, err := u.UserRepository.FindAll()
-	helper.ErrorPanic(err)
+	// helper.ErrorPanic(err)
+
+	if err != nil {
+		userServicePrintln(err)
+		return users, err
+	}
 
 	for _, v := range result {
 		found := response.UserResponse{
@@ -120,39 +166,58 @@ func (u *UserServiceImpl) FindAll() []response.UserResponse {
 			Age:      int(v.Age),
 			Email:    v.Email,
 			Phone:    v.Phone,
-			Tags:     v.Tags,
 			Posts:    v.Posts,
 		}
 
 		users = append(users, found)
 	}
 
-	return users
+	return users, nil
 }
 
 // FindById implements UserService.
-func (u *UserServiceImpl) FindById(userId int) response.UserResponse {
-	result, err := u.UserRepository.FindById(userId)
-	helper.ErrorPanic(err)
+func (u *UserServiceImpl) FindById(userId int) (userdata response.UserResponse, err error) {
+	var userReponse response.UserResponse
 
-	userReponse := response.UserResponse{
+	result, findErr := u.UserRepository.FindById(userId)
+	// helper.ErrorPanic(findErr)
+
+	if findErr != nil {
+		userServicePrintln(findErr)
+		return userReponse, findErr
+	}
+
+	userReponse = response.UserResponse{
 		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
 		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
-		Tags:     result.Tags,
 		Posts:    result.Posts,
 	}
 
-	return userReponse
+	return userReponse, nil
 }
 
 // Update implements UserService.
-func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.UserResponse {
-	found, err := u.UserRepository.FindById(user.ID)
-	helper.ErrorPanic(err)
+func (u *UserServiceImpl) Update(id int, user request.UpdateUserRequest) (userdata response.UserResponse, err error) {
+	var userReponse response.UserResponse
+
+	validateErr := u.Validate.Struct(user)
+
+	if validateErr != nil {
+		userServicePrintln(validateErr)
+		return userReponse, validateErr
+	}
+
+	found, err := u.UserRepository.FindById(id)
+	// helper.ErrorPanic(err)
+
+	if err != nil {
+		userServicePrintln(err)
+		return userReponse, err
+	}
 
 	found.Name = user.Name
 	// found.Username = user.Username
@@ -161,20 +226,24 @@ func (u *UserServiceImpl) Update(user request.UpdateUserRequest) response.UserRe
 	found.Phone = user.Phone
 
 	result, resultErr := u.UserRepository.Update(found)
-	helper.ErrorPanic(resultErr)
+	// helper.ErrorPanic(resultErr)
 
-	userReponse := response.UserResponse{
+	if resultErr != nil {
+		userServicePrintln(resultErr)
+		return userReponse, resultErr
+	}
+
+	userReponse = response.UserResponse{
 		ID:       int(result.ID),
 		Name:     result.Name,
 		Username: result.Username,
 		Age:      int(result.Age),
 		Email:    result.Email,
 		Phone:    result.Phone,
-		Tags:     result.Tags,
 		Posts:    result.Posts,
 	}
 
-	return userReponse
+	return userReponse, nil
 
 }
 

@@ -7,7 +7,7 @@ type CreatePostRequest struct {
 }
 
 type UpdatePostRequest struct {
-	ID    int    `validate:"required" json:"post_id"`
+	// ID    int    `validate:"required" json:"post_id"`
 	Title string `validate:"required,min=5,max=255" json:"title"`
 	Body  string `validate:"required,min=5,max=255" json:"body"`
 }
