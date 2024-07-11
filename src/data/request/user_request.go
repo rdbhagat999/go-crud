@@ -2,7 +2,7 @@ package request
 
 type CreateUserRequest struct {
 	Name     string `validate:"required,min=5,max=200" json:"name"`
-	Username string `validate:"required,min=5,max=200,alpha" json:"username"`
+	Username string `validate:"required,min=5,max=200,alphanum" json:"username"`
 	Password string `validate:"required,min=5,max=255" json:"password"`
 	Age      int    `validate:"required,min=18,max=60" json:"age"`
 	Email    string `validate:"required,min=5,max=200" json:"email"`

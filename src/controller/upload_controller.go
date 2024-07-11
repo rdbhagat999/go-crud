@@ -44,23 +44,49 @@ func saveFile(fileHeader *multipart.FileHeader, key int) error {
 }
 
 func UploadFile(ctx *gin.Context) {
-	form, err := ctx.MultipartForm()
+	// form, err := ctx.MultipartForm()
 
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// if err != nil {
+	// 	ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	// files := form.File["files"]
+
+	// for key, file := range files {
+	// 	err := saveFile(file, key)
+
+	// 	if err != nil {
+	// 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 		return
+	// 	}
+	// }
+
+	// ctx.JSON(http.StatusOK, gin.H{"message": "Files uploaded successfully"})
+
+	name := ctx.PostForm("name")
+	email := ctx.PostForm("email")
+
+	// Multipart form
+	form, frmErr := ctx.MultipartForm()
+
+	if frmErr != nil {
+		ctx.String(http.StatusBadRequest, "get form err: %s", frmErr.Error())
 		return
 	}
-
 	files := form.File["files"]
 
-	for key, file := range files {
-		err := saveFile(file, key)
+	for _, file := range files {
 
-		if err != nil {
-			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		// Create a new file in the desired destination folder
+		dstPath := filepath.Join("./uploads", file.Filename)
+
+		if err := ctx.SaveUploadedFile(file, dstPath); err != nil {
+			ctx.String(http.StatusBadRequest, "upload file err: %s", err.Error())
 			return
 		}
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Files uploaded successfully"})
+	ctx.String(http.StatusOK, "Uploaded successfully %d files with fields name=%s and email=%s.", len(files), name, email)
+
 }
