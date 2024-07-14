@@ -89,15 +89,15 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 	if !userExists {
 
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
 			Data:    nil,
-			Message: "Authentication failed failed",
+			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
 		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 
 	}

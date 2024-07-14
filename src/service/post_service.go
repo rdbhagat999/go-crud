@@ -11,4 +11,5 @@ type PostService interface {
 	Delete(postId int)
 	FindById(postId int) (postdata response.PostResponse, err error)
 	FindAll() (postList []response.PostResponse, err error)
+	FindAllByUserId(userId int) (postList []response.PostResponse, err error)
 }

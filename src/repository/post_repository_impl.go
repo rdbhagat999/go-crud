@@ -49,6 +49,20 @@ func (p *PostRepositoryImpl) FindAll() (posts []model.Post, err error) {
 	return postList, nil
 }
 
+// FindAllByUserId implements PostRepository.
+func (p *PostRepositoryImpl) FindAllByUserId(userId int) (posts []model.Post, err error) {
+	var postList []model.Post
+
+	postListErr := p.Db.Model(&model.Post{}).Preload(clause.Associations).Find(&postList, userId).Error
+
+	if postListErr != nil {
+		postRepositoryPrintln(postListErr)
+		return postList, postListErr
+	}
+
+	return postList, nil
+}
+
 // FindById implements PostRepository.
 func (p *PostRepositoryImpl) FindById(postId int) (post model.Post, err error) {
 	var foundPost model.Post
@@ -71,12 +85,7 @@ func (p *PostRepositoryImpl) FindById(postId int) (post model.Post, err error) {
 // Save implements PostRepository.
 func (p *PostRepositoryImpl) Save(post model.Post) (ps model.Post, err error) {
 
-	createPost := request.CreatePostRequest{
-		Title: post.Title,
-		Body:  post.Body,
-	}
-
-	createErr := p.Db.Model(&post).Create(createPost).Error
+	createErr := p.Db.Create(&post).Error
 	// helper.ErrorPanic(createErr)
 
 	if createErr != nil {

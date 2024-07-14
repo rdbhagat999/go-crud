@@ -19,7 +19,7 @@ type Config struct {
 	GITHUB_USER     string        `mapstructure:"GITHUB_USER"`
 }
 
-func LoadConfig(path string) (cfg Config, err error) {
+func LoadConfig() (cfg Config, err error) {
 	loadErr := godotenv.Load()
 	var config Config
 

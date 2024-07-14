@@ -69,7 +69,7 @@ func main() {
 
 	log.Info().Msg("Server started")
 
-	loadConfig, err := config.LoadConfig(".")
+	loadConfig, err := config.LoadConfig()
 
 	if err != nil {
 		evt := log.Fatal()
@@ -118,8 +118,9 @@ func main() {
 	postRouter.Use(middlewares.JWTAuthMiddleware(userController))
 
 	postRouter.GET("/", postController.FindAll)
-	postRouter.GET("/:postId", postController.FindById)
 	postRouter.POST("/", postController.Create)
+	postRouter.GET("/userposts", postController.FindAllByUserId)
+	postRouter.GET("/:postId", postController.FindById)
 	postRouter.PUT("/:postId", postController.Update)
 	postRouter.DELETE("/:postId", postController.Delete)
 
