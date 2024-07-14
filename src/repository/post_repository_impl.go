@@ -53,7 +53,7 @@ func (p *PostRepositoryImpl) FindAll() (posts []model.Post, err error) {
 func (p *PostRepositoryImpl) FindAllByUserId(userId int) (posts []model.Post, err error) {
 	var postList []model.Post
 
-	postListErr := p.Db.Model(&model.Post{}).Preload(clause.Associations).Find(&postList, userId).Error
+	postListErr := p.Db.Model(&model.Post{}).Preload(clause.Associations).Where("user_id=?", userId).Find(&postList).Error
 
 	if postListErr != nil {
 		postRepositoryPrintln(postListErr)
