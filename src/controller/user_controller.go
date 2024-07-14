@@ -58,14 +58,15 @@ func (controller *UserController) Create(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
 	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   user,
+		Code:    http.StatusOK,
+		Status:  "Ok",
+		Data:    user,
+		Message: "User registered successfully",
 	}
 
 	ctx.Header("Content-Type", "application/json")
@@ -82,100 +83,31 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /users/user [POST]
 func (controller *UserController) AuthUser(ctx *gin.Context) {
-	var webResponse response.Response
-	var username string
-	var expiresAt *jwt.NumericDate
+	userId, userExists := ctx.Get("userId")
+	fmt.Printf("AuthUserId: %v", userId)
 
-	jwtString, cookieError := ctx.Cookie("jwt")
-	// helper.ErrorPanic(cookieError)
+	if !userExists {
 
-	if cookieError != nil {
-		userControllerPrintln(cookieError)
-
-		webResponse = response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
 			Data:    nil,
-			Message: cookieError.Error(),
+			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
 		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-
-		return
-	}
-
-	token, parseErr := jwt.ParseWithClaims(jwtString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("TOKEN_SECRET")), nil
-	})
-
-	if parseErr != nil {
-		userControllerPrintln(parseErr)
-		// helper.ErrorPanic(parseErr)
-
-		webResponse = response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
-			Data:    nil,
-			Message: parseErr.Error(),
-		}
-
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		return
-
-	} else if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok {
-		fmt.Println(claims.Issuer)
-		username = claims.Issuer
-		expiresAt = claims.ExpiresAt
-	} else {
-		fmt.Println("unknown claims type, cannot proceed")
-
-		webResponse = response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
-			Data:    nil,
-			Message: "unknown claims type, cannot proceed",
-		}
-
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		return
-	}
-
-	if username == "" {
-		webResponse = response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
-			Data:    nil,
-			Message: "invalid token",
-		}
-
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		return
-	}
-
-	if jwt.NewNumericDate(time.Now()).UnixNano() > expiresAt.UnixNano() {
-		webResponse = response.Response{
-			Code:   http.StatusBadRequest,
-			Status: http.StatusText(http.StatusBadRequest),
-			Data:   nil,
-		}
-
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 
 	}
 
-	user, userErr := controller.UserService.FindByUsername(username)
+	user, userErr := controller.UserService.FindById(userId.(int))
 
 	if userErr != nil {
 		userControllerPrintln(userErr)
 		// helper.ErrorPanic(userErr)
-
-		webResponse = response.Response{
+		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  http.StatusText(http.StatusBadRequest),
 			Data:    nil,
@@ -184,11 +116,12 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
 
-	webResponse = response.Response{
+	webResponse := response.Response{
 		Code:   http.StatusOK,
 		Status: "Ok",
 		Data:   user,
@@ -209,12 +142,13 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 // @Router  /users/Logout [POST]
 func (controller *UserController) Logout(ctx *gin.Context) {
 
-	ctx.SetCookie("jwt", "", time.Now().Add(-time.Hour*24).Second(), "/", "", false, true)
+	ctx.SetCookie("jwt", "", int(-1), "/", "localhost", false, true)
 
 	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   nil,
+		Code:    http.StatusOK,
+		Status:  "Ok",
+		Data:    nil,
+		Message: "logout successfull",
 	}
 
 	ctx.Header("Content-Type", "application/json")
@@ -250,6 +184,7 @@ func (controller *UserController) Login(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
@@ -257,10 +192,11 @@ func (controller *UserController) Login(ctx *gin.Context) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		// Also fixed dates can be used for the NumericDate
 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-		Issuer:    user.Username,
-		ID:        strconv.Itoa(int(user.ID)),
+		Issuer:    strconv.Itoa(user.ID),
+		// ID:        strconv.Itoa(int(user.ID)),
 	})
 
+	println("TOKEN_SECRET", os.Getenv("TOKEN_SECRET"))
 	tokenString, tokenErr := token.SignedString([]byte(os.Getenv("TOKEN_SECRET")))
 	// helper.ErrorPanic(tokenErr)
 
@@ -276,16 +212,20 @@ func (controller *UserController) Login(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
 
-	ctx.SetCookie("jwt", tokenString, time.Now().Add(time.Hour*24).Second(), "/", "", false, true)
+	maxAge, _ := strconv.Atoi(os.Getenv("TOKEN_MAX_AGE"))
+
+	ctx.SetCookie("jwt", tokenString, maxAge, "/", "localhost", false, true)
 
 	webResponse := response.Response{
-		Code:   http.StatusOK,
-		Status: "Ok",
-		Data:   user,
+		Code:    http.StatusOK,
+		Status:  "Ok",
+		Data:    user,
+		Message: "Login successful",
 	}
 
 	ctx.Header("Content-Type", "application/json")
@@ -304,6 +244,7 @@ func (controller *UserController) Login(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /users/{userId} [PUT]
 func (controller *UserController) Update(ctx *gin.Context) {
+
 	updateUserRequest := request.UpdateUserRequest{}
 	err := ctx.ShouldBindJSON(&updateUserRequest)
 	helper.ErrorPanic(err)
@@ -324,6 +265,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
@@ -344,6 +286,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
@@ -385,6 +328,7 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
@@ -428,6 +372,7 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
@@ -446,6 +391,7 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}
@@ -461,6 +407,7 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusNotFound, webResponse)
+		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
@@ -498,6 +445,7 @@ func (controller *UserController) FindAll(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 
 	}

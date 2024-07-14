@@ -24,7 +24,16 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Get all post",
+                "summary": "Get all post y userId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Find post by userId",
+                        "name": "userId",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",

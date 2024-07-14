@@ -127,6 +127,12 @@ paths:
       consumes:
       - application/json
       description: Returns a list of post
+      parameters:
+      - description: Find post by userId
+        in: path
+        name: userId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -134,7 +140,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Get all post
+      summary: Get all post y userId
     post:
       consumes:
       - application/json

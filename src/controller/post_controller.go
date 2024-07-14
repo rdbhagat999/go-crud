@@ -36,9 +36,50 @@ func postControllerPrintln(err error) {
 // @Success  200 {object} response.Response{}
 // @Router  /posts [POST]
 func (controller *PostController) Create(ctx *gin.Context) {
+
+	userId, userExists := ctx.Get("userId")
+	fmt.Printf("AuthUserId: %v", userId)
+
+	if !userExists {
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+
+	}
+
+	if userId == "" || userId == nil || userId == 0 {
+
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+
+	}
+
 	createPostRequest := request.CreatePostRequest{}
+	createPostRequest.UserID = userId.(int)
+
 	err := ctx.ShouldBindJSON(&createPostRequest)
-	helper.ErrorPanic(err)
+
+	if err != nil {
+		helper.ErrorPanic(err)
+	}
 
 	post, createErr := controller.PostService.Create(createPostRequest)
 
@@ -54,7 +95,7 @@ func (controller *PostController) Create(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -80,6 +121,42 @@ func (controller *PostController) Create(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /posts/{postId} [PUT]
 func (controller *PostController) Update(ctx *gin.Context) {
+
+	userId, userExists := ctx.Get("userId")
+	fmt.Printf("AuthUserId: %v", userId)
+
+	if !userExists {
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+
+	}
+
+	if userId == "" || userId == nil || userId == 0 {
+
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+
+	}
+
 	updatePostRequest := request.UpdatePostRequest{}
 	err := ctx.ShouldBindJSON(&updatePostRequest)
 	helper.ErrorPanic(err)
@@ -100,7 +177,7 @@ func (controller *PostController) Update(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -118,7 +195,7 @@ func (controller *PostController) Update(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -143,6 +220,42 @@ func (controller *PostController) Update(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /posts/{postId} [DELETE]
 func (controller *PostController) Delete(ctx *gin.Context) {
+
+	userId, userExists := ctx.Get("userId")
+	fmt.Printf("AuthUserId: %v", userId)
+
+	if !userExists {
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+
+	}
+
+	if userId == "" || userId == nil || userId == 0 {
+
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+
+	}
+
 	postId := ctx.Param("postId")
 	id, paramErr := strconv.Atoi(postId)
 	// helper.ErrorPanic(paramErr)
@@ -159,8 +272,41 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
+	}
+
+	post, findErr := controller.PostService.FindById(id)
+
+	if findErr != nil {
+		postControllerPrintln(findErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: findErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if post.UserID != userId.(int) {
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+
 	}
 
 	controller.PostService.Delete(id)
@@ -202,7 +348,7 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -220,7 +366,7 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
-
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
@@ -235,6 +381,7 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusNotFound, webResponse)
+		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
@@ -272,7 +419,80 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
 
+	webResponse := response.Response{
+		Code:   http.StatusOK,
+		Status: "Ok",
+		Data:   posts,
+	}
+
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusOK, webResponse)
+}
+
+// FindAllByUserId godoc
+// @Summary  Get all post y userId
+// @Description Returns a list of post
+// @Param  userId path string true "Find post by userId"
+// @Accept json
+// @Produce  json
+// @Post  post
+// @Success  200 {object} response.Response{}
+// @Router  /posts [GET]
+func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
+	userId, userExists := ctx.Get("userId")
+	fmt.Printf("AuthUserId: %v", userId)
+
+	if !userExists {
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+
+	}
+
+	if userId == "" || userId == nil || userId == 0 {
+
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+
+	}
+
+	posts, listErr := controller.PostService.FindAllByUserId(userId.(int))
+
+	if listErr != nil {
+		postControllerPrintln(listErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: listErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 

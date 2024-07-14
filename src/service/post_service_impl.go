@@ -35,6 +35,13 @@ func (p *PostServiceImpl) Create(post request.CreatePostRequest) (postdata respo
 		UserID: uint(post.UserID),
 	}
 
+	// println("")
+	// println("postModel")
+	// println(postModel.UserID)
+	// println(postModel.Title)
+	// println(postModel.Body)
+	// println("")
+
 	result, resultErr := p.PostRepository.Save(postModel)
 	// helper.ErrorPanic(resultErr)
 	if resultErr != nil {
@@ -62,6 +69,32 @@ func (p *PostServiceImpl) FindAll() (postList []response.PostResponse, err error
 	var posts = []response.PostResponse{}
 
 	result, resultErr := p.PostRepository.FindAll()
+	// helper.ErrorPanic(resultErr)
+
+	if resultErr != nil {
+		postServicePrintln(resultErr)
+		return posts, resultErr
+	}
+
+	for _, v := range result {
+		found := response.PostResponse{
+			ID:     int(v.ID),
+			Title:  v.Title,
+			Body:   v.Body,
+			UserID: int(v.UserID),
+		}
+
+		posts = append(posts, found)
+	}
+
+	return posts, nil
+}
+
+// FindAllByUserId implements PostService.
+func (p *PostServiceImpl) FindAllByUserId(userId int) (postList []response.PostResponse, err error) {
+	var posts = []response.PostResponse{}
+
+	result, resultErr := p.PostRepository.FindAllByUserId(userId)
 	// helper.ErrorPanic(resultErr)
 
 	if resultErr != nil {

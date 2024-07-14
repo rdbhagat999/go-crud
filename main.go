@@ -7,6 +7,7 @@ import (
 	"go-crud/src/controller"
 	"go-crud/src/dsa"
 	"go-crud/src/helper"
+	"go-crud/src/middlewares"
 	"go-crud/src/model"
 	"go-crud/src/repository"
 	"go-crud/src/router"
@@ -14,7 +15,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-contrib/cors"
 	"github.com/go-playground/validator/v10"
 	"github.com/rs/zerolog/log"
 )
@@ -69,7 +69,7 @@ func main() {
 
 	log.Info().Msg("Server started")
 
-	loadConfig, err := config.LoadConfig(".")
+	loadConfig, err := config.LoadConfig()
 
 	if err != nil {
 		evt := log.Fatal()
@@ -97,34 +97,32 @@ func main() {
 
 	router, apiVersion1 := router.NewRouter()
 
-	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"POST", "PUT", "GET", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin"},
-		ExposeHeaders:    []string{"Content-Length"},
-		AllowCredentials: true,
-		// AllowOriginFunc: func(origin string) bool {
-		// 	return origin == "https://github.com"
-		// },
-		MaxAge: 24 * time.Hour,
-	}))
+	authRouter := apiVersion1.Group("/auth")
+	authRouter.POST("/register", userController.Create)
+	authRouter.POST("/login", userController.Login)
+	authRouter.POST("/logout", userController.Logout)
 
-	postRouter := apiVersion1.Group("/posts")
-	postRouter.GET("/", postController.FindAll)
-	postRouter.GET("/:postId", postController.FindById)
-	postRouter.POST("/", postController.Create)
-	postRouter.PUT("/:postId", postController.Update)
-	postRouter.DELETE("/:postId", postController.Delete)
+	uploadRouter := apiVersion1.Group("/upload")
+	uploadRouter.POST("/", controller.UploadFile)
 
 	userRouter := apiVersion1.Group("/users")
+	userRouter.Use(middlewares.JWTAuthMiddleware(userController))
+
 	userRouter.GET("/", userController.FindAll)
-	userRouter.GET("/:userId", userController.FindById)
-	userRouter.POST("/", userController.Create)
-	userRouter.POST("/login", userController.Login)
-	userRouter.POST("/logout", userController.Logout)
 	userRouter.POST("/authuser", userController.AuthUser)
+	userRouter.GET("/:userId", userController.FindById)
 	userRouter.PUT("/:userId", userController.Update)
 	userRouter.DELETE("/:userId", userController.Delete)
+
+	postRouter := apiVersion1.Group("/posts")
+	postRouter.Use(middlewares.JWTAuthMiddleware(userController))
+
+	postRouter.GET("/", postController.FindAll)
+	postRouter.POST("/", postController.Create)
+	postRouter.GET("/userposts", postController.FindAllByUserId)
+	postRouter.GET("/:postId", postController.FindById)
+	postRouter.PUT("/:postId", postController.Update)
+	postRouter.DELETE("/:postId", postController.Delete)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.SERVER_PORT,

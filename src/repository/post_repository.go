@@ -8,4 +8,5 @@ type PostRepository interface {
 	Delete(postId int)
 	FindById(postId int) (foundPost model.Post, err error)
 	FindAll() (posts []model.Post, err error)
+	FindAllByUserId(userId int) (posts []model.Post, err error)
 }
