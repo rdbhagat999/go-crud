@@ -1,5 +1,7 @@
 # Golang Demo API project
 
-## PostgreSql DB: go-crud
+## A simple go lang project with cookie based JWT authentication
 
-## Swagger UI: /docs/index.html
+### PostgreSql DB: go-crud
+
+### Swagger UI: /docs/index.html
