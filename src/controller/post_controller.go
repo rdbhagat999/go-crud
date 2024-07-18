@@ -185,6 +185,38 @@ func (controller *PostController) Update(ctx *gin.Context) {
 		return
 	}
 
+	found, foundErr := controller.PostService.FindById(id)
+
+	if foundErr != nil {
+		postControllerPrintln(foundErr)
+
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: foundErr.Error(),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		return
+	}
+
+	if found.UserID != userId {
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.Header("Content-Type", "application/json")
+		ctx.JSON(http.StatusUnauthorized, webResponse)
+		ctx.AbortWithStatus(http.StatusUnauthorized)
+		return
+	}
+
 	post, updateErr := controller.PostService.Update(id, updatePostRequest)
 
 	if updateErr != nil {
