@@ -45,7 +45,7 @@ func (u *UserServiceImpl) Create(user request.CreateUserRequest) (userdata respo
 	userModel := model.User{
 		Name:     user.Name,
 		Username: user.Username,
-		Age:      uint(user.Age),
+		Age:      user.Age,
 		Email:    user.Email,
 		Phone:    user.Phone,
 		Password: password,
@@ -221,7 +221,7 @@ func (u *UserServiceImpl) Update(id int, user request.UpdateUserRequest) (userda
 
 	found.Name = user.Name
 	// found.Username = user.Username
-	found.Age = uint(user.Age)
+	found.Age = user.Age
 	found.Email = user.Email
 	found.Phone = user.Phone
 

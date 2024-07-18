@@ -5,6 +5,7 @@ import (
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
+	"go-crud/src/model"
 	"go-crud/src/service"
 	"net/http"
 	"strconv"
@@ -73,15 +74,18 @@ func (controller *PostController) Create(ctx *gin.Context) {
 	}
 
 	createPostRequest := request.CreatePostRequest{}
-	createPostRequest.UserID = userId.(int)
-
 	err := ctx.ShouldBindJSON(&createPostRequest)
 
 	if err != nil {
 		helper.ErrorPanic(err)
 	}
 
-	post, createErr := controller.PostService.Create(createPostRequest)
+	createPost := model.Post{}
+	createPost.UserID = userId.(int)
+	createPost.Title = createPostRequest.Title
+	createPost.Body = createPostRequest.Body
+
+	post, createErr := controller.PostService.Create(createPost)
 
 	if createErr != nil {
 		postControllerPrintln(createErr)
@@ -434,14 +438,13 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 }
 
 // FindAllByUserId godoc
-// @Summary  Get all post y userId
+// @Summary  Get all post by userId
 // @Description Returns a list of post
-// @Param  userId path string true "Find post by userId"
 // @Accept json
 // @Produce  json
 // @Post  post
 // @Success  200 {object} response.Response{}
-// @Router  /posts [GET]
+// @Router  /posts/userposts [GET]
 func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 	userId, userExists := ctx.Get("userId")
 	fmt.Printf("AuthUserId: %v", userId)

@@ -30,14 +30,14 @@ func NewUserController(service service.UserService) *UserController {
 }
 
 // CreateUser godoc
-// @Summary  Create user
+// @Summary  Register user
 // @Description  Save user in database
 // @Param  user body request.CreateUserRequest true "Create user"
 // @Accept json
 // @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
-// @Router  /users [POST]
+// @Router  /auth/register [POST]
 func (controller *UserController) Create(ctx *gin.Context) {
 	createUserRequest := request.CreateUserRequest{}
 	err := ctx.ShouldBindJSON(&createUserRequest)
@@ -81,7 +81,7 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
-// @Router  /users/user [POST]
+// @Router  /users/authuser [GET]
 func (controller *UserController) AuthUser(ctx *gin.Context) {
 	userId, userExists := ctx.Get("userId")
 	fmt.Printf("AuthUserId: %v", userId)
@@ -133,13 +133,13 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 }
 
 // Logout godoc
-// @Summary  Logout authenticated user
+// @Summary  Logout user
 // @Description  Logout user in database
 // @Accept json
 // @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
-// @Router  /users/Logout [POST]
+// @Router  /auth/logout [POST]
 func (controller *UserController) Logout(ctx *gin.Context) {
 
 	ctx.SetCookie("jwt", "", int(-1), "/", "localhost", false, true)
@@ -164,7 +164,7 @@ func (controller *UserController) Logout(ctx *gin.Context) {
 // @Produce  json
 // @Tag  user
 // @Success  200 {object} response.Response{}
-// @Router  /users/login [POST]
+// @Router  /auth/login [POST]
 func (controller *UserController) Login(ctx *gin.Context) {
 	loginUserRequest := request.LoginUserRequest{}
 	err := ctx.ShouldBindJSON(&loginUserRequest)

@@ -10,12 +10,9 @@ definitions:
         maxLength: 255
         minLength: 5
         type: string
-      user_id:
-        type: integer
     required:
     - body
     - title
-    - user_id
     type: object
   request.CreateUserRequest:
     properties:
@@ -122,17 +119,18 @@ info:
   title: Demo Service API
   version: 1.0.0
 paths:
-  /posts:
-    get:
+  /auth/login:
+    post:
       consumes:
       - application/json
-      description: Returns a list of post
+      description: Login user in database
       parameters:
-      - description: Find post by userId
-        in: path
-        name: userId
+      - description: Login user
+        in: body
+        name: user
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/request.LoginUserRequest'
       produces:
       - application/json
       responses:
@@ -140,7 +138,53 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
-      summary: Get all post y userId
+      summary: Login user
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout user in database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Logout user
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Save user in database
+      parameters:
+      - description: Create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/request.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Register user
+  /posts:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of post
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all post
     post:
       consumes:
       - application/json
@@ -221,6 +265,19 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update post
+  /posts/userposts:
+    get:
+      consumes:
+      - application/json
+      description: Returns a list of post
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get all post by userId
   /users:
     get:
       consumes:
@@ -234,25 +291,6 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get all users
-    post:
-      consumes:
-      - application/json
-      description: Save user in database
-      parameters:
-      - description: Create user
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/request.CreateUserRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-      summary: Create user
   /users/{userId}:
     delete:
       consumes:
@@ -314,41 +352,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update user
-  /users/Logout:
-    post:
-      consumes:
-      - application/json
-      description: Logout user in database
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-      summary: Logout authenticated user
-  /users/login:
-    post:
-      consumes:
-      - application/json
-      description: Login user in database
-      parameters:
-      - description: Login user
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/request.LoginUserRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/response.Response'
-      summary: Login user
-  /users/user:
-    post:
+  /users/authuser:
+    get:
       consumes:
       - application/json
       description: Get user in database
