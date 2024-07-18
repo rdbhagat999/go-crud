@@ -20,7 +20,7 @@ func postServicePrintln(err error) {
 }
 
 // Create implements PostService.
-func (p *PostServiceImpl) Create(post request.CreatePostRequest) (postdata response.PostResponse, err error) {
+func (p *PostServiceImpl) Create(post model.Post) (postdata response.PostResponse, err error) {
 	validateErr := p.Validate.Struct(post)
 	// helper.ErrorPanic(validateErr)
 
@@ -29,20 +29,7 @@ func (p *PostServiceImpl) Create(post request.CreatePostRequest) (postdata respo
 		return response.PostResponse{}, validateErr
 	}
 
-	postModel := model.Post{
-		Title:  post.Title,
-		Body:   post.Body,
-		UserID: uint(post.UserID),
-	}
-
-	// println("")
-	// println("postModel")
-	// println(postModel.UserID)
-	// println(postModel.Title)
-	// println(postModel.Body)
-	// println("")
-
-	result, resultErr := p.PostRepository.Save(postModel)
+	result, resultErr := p.PostRepository.Save(post)
 	// helper.ErrorPanic(resultErr)
 	if resultErr != nil {
 		postServicePrintln(resultErr)
@@ -155,7 +142,7 @@ func (p *PostServiceImpl) Update(id int, post request.UpdatePostRequest) (postda
 		return response.PostResponse{}, foundErr
 	}
 
-	found.ID = uint(id)
+	found.ID = id
 	found.Title = post.Title
 	found.Body = post.Body
 
