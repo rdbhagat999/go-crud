@@ -109,8 +109,8 @@ func main() {
 	userRouter.Use(middlewares.JWTAuthMiddleware(userController))
 
 	userRouter.GET("/", userController.FindAll)
-	userRouter.POST("/authuser", userController.AuthUser)
 	userRouter.GET("/:userId", userController.FindById)
+	userRouter.GET("/authuser", userController.AuthUser)
 	userRouter.PUT("/:userId", userController.Update)
 	userRouter.DELETE("/:userId", userController.Delete)
 
@@ -118,9 +118,9 @@ func main() {
 	postRouter.Use(middlewares.JWTAuthMiddleware(userController))
 
 	postRouter.GET("/", postController.FindAll)
-	postRouter.POST("/", postController.Create)
 	postRouter.GET("/userposts", postController.FindAllByUserId)
 	postRouter.GET("/:postId", postController.FindById)
+	postRouter.POST("/", postController.Create)
 	postRouter.PUT("/:postId", postController.Update)
 	postRouter.DELETE("/:postId", postController.Delete)
 
