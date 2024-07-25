@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -39,9 +40,10 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 				Message: "cookie not found",
 			}
 
-			ctx.Header("Content-Type", "application/json")
-			ctx.JSON(http.StatusUnauthorized, webResponse)
-			ctx.AbortWithStatus(http.StatusUnauthorized)
+			// ctx.Header("Content-Type", "application/json")
+			// ctx.JSON(http.StatusUnauthorized, webResponse)
+			// ctx.AbortWithStatus(http.StatusUnauthorized)
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
 
 			return
 		}
@@ -62,13 +64,48 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 				Message: "parseErr",
 			}
 
-			ctx.Header("Content-Type", "application/json")
-			ctx.JSON(http.StatusBadRequest, webResponse)
-			ctx.AbortWithStatus(http.StatusBadRequest)
+			// ctx.Header("Content-Type", "application/json")
+			// ctx.JSON(http.StatusBadRequest, webResponse)
+			// ctx.AbortWithStatus(http.StatusBadRequest)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
 
 			return
 
-		} else if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok {
+		}
+
+		tokenFields := strings.Split(jwtString, " ")
+
+		if len(tokenFields) < 2 {
+			webResponse = response.Response{
+				Code:   http.StatusUnauthorized,
+				Status: http.StatusText(http.StatusUnauthorized),
+				Data:   nil,
+				// Message: parseErr.Error(),
+				Message: "Invalid token",
+			}
+
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+			return
+		}
+
+		authType := strings.ToLower(tokenFields[0])
+
+		if authType != "bearer" {
+			webResponse = response.Response{
+				Code:   http.StatusUnauthorized,
+				Status: http.StatusText(http.StatusUnauthorized),
+				Data:   nil,
+				// Message: parseErr.Error(),
+				Message: "Invalid token",
+			}
+
+			ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+			return
+		}
+
+		if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok {
 
 			expiresAt = claims.ExpiresAt
 
@@ -80,9 +117,10 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 					Message: "token expired",
 				}
 
-				ctx.Header("Content-Type", "application/json")
-				ctx.JSON(http.StatusUnauthorized, webResponse)
-				ctx.AbortWithStatus(http.StatusUnauthorized)
+				// ctx.Header("Content-Type", "application/json")
+				// ctx.JSON(http.StatusUnauthorized, webResponse)
+				// ctx.AbortWithStatus(http.StatusUnauthorized)
+				ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
 
 				return
 
@@ -102,9 +140,10 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 					Message: "invalid token",
 				}
 
-				ctx.Header("Content-Type", "application/json")
-				ctx.JSON(http.StatusBadRequest, webResponse)
-				ctx.AbortWithStatus(http.StatusBadRequest)
+				// ctx.Header("Content-Type", "application/json")
+				// ctx.JSON(http.StatusBadRequest, webResponse)
+				// ctx.AbortWithStatus(http.StatusBadRequest)
+				ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
 
 				return
 			}
@@ -117,9 +156,10 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 					Message: err.Error(),
 				}
 
-				ctx.Header("Content-Type", "application/json")
-				ctx.JSON(http.StatusBadRequest, webResponse)
-				ctx.AbortWithStatus(http.StatusUnauthorized)
+				// ctx.Header("Content-Type", "application/json")
+				// ctx.JSON(http.StatusBadRequest, webResponse)
+				// ctx.AbortWithStatus(http.StatusUnauthorized)
+				ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
 
 				return
 			}
@@ -134,9 +174,10 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 				Message: "unknown claims type, cannot proceed",
 			}
 
-			ctx.Header("Content-Type", "application/json")
-			ctx.JSON(http.StatusBadRequest, webResponse)
-			ctx.AbortWithStatus(http.StatusBadRequest)
+			// ctx.Header("Content-Type", "application/json")
+			// ctx.JSON(http.StatusBadRequest, webResponse)
+			// ctx.AbortWithStatus(http.StatusBadRequest)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
 
 			return
 		}
@@ -154,9 +195,10 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 				Message: "userErr",
 			}
 
-			ctx.Header("Content-Type", "application/json")
-			ctx.JSON(http.StatusBadRequest, webResponse)
-			ctx.AbortWithStatus(http.StatusBadRequest)
+			// ctx.Header("Content-Type", "application/json")
+			// ctx.JSON(http.StatusBadRequest, webResponse)
+			// ctx.AbortWithStatus(http.StatusBadRequest)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
 
 			return
 
