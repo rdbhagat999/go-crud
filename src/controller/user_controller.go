@@ -2,12 +2,12 @@ package controller
 
 import (
 	"fmt"
+	"go-crud/src/constants"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
 	"go-crud/src/service"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
@@ -203,8 +203,7 @@ func (controller *UserController) Login(ctx *gin.Context) {
 		// ID:        strconv.Itoa(int(user.ID)),
 	})
 
-	println("TOKEN_SECRET", os.Getenv("TOKEN_SECRET"))
-	tokenString, tokenErr := token.SignedString([]byte(os.Getenv("TOKEN_SECRET")))
+	tokenString, tokenErr := token.SignedString([]byte(helper.GetEnvVariable(constants.TOKEN_SECRET)))
 	// helper.ErrorPanic(tokenErr)
 
 	if tokenErr != nil {
@@ -226,9 +225,9 @@ func (controller *UserController) Login(ctx *gin.Context) {
 
 	}
 
-	maxAge, _ := strconv.Atoi(os.Getenv("TOKEN_MAX_AGE"))
+	maxAge, _ := strconv.Atoi(helper.GetEnvVariable(constants.TOKEN_MAX_AGE))
 
-	ctx.SetCookie("jwt", tokenString, maxAge, "/", "localhost", false, true)
+	ctx.SetCookie(constants.AUTH_COOKIE_NAME, "bearer "+tokenString, maxAge, "/", "localhost", false, true)
 
 	webResponse := response.Response{
 		Code:    http.StatusOK,
@@ -352,7 +351,7 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   nil,
 	}
 
@@ -434,7 +433,7 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   user,
 	}
 
@@ -475,7 +474,7 @@ func (controller *UserController) FindAll(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   users,
 	}
 

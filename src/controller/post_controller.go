@@ -68,9 +68,9 @@ func (controller *PostController) Create(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
 		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
 
 		return
@@ -497,7 +497,7 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   posts,
 	}
 
@@ -575,7 +575,7 @@ func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   posts,
 	}
 

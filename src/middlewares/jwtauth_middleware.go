@@ -2,10 +2,11 @@ package middlewares
 
 import (
 	"fmt"
+	"go-crud/src/constants"
 	"go-crud/src/controller"
 	"go-crud/src/data/response"
+	"go-crud/src/helper"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -48,31 +49,6 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 			return
 		}
 
-		token, parseErr := jwt.ParseWithClaims(jwtString, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
-			return []byte(os.Getenv("TOKEN_SECRET")), nil
-		})
-
-		if parseErr != nil {
-			middlewarePrintln(parseErr)
-			// helper.ErrorPanic(parseErr)
-
-			webResponse = response.Response{
-				Code:   http.StatusBadRequest,
-				Status: http.StatusText(http.StatusBadRequest),
-				Data:   nil,
-				// Message: parseErr.Error(),
-				Message: "parseErr",
-			}
-
-			// ctx.Header("Content-Type", "application/json")
-			// ctx.JSON(http.StatusBadRequest, webResponse)
-			// ctx.AbortWithStatus(http.StatusBadRequest)
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
-
-			return
-
-		}
-
 		tokenFields := strings.Split(jwtString, " ")
 
 		if len(tokenFields) < 2 {
@@ -103,6 +79,31 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
 
 			return
+		}
+
+		token, parseErr := jwt.ParseWithClaims(tokenFields[1], &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return []byte(helper.GetEnvVariable(constants.TOKEN_SECRET)), nil
+		})
+
+		if parseErr != nil {
+			middlewarePrintln(parseErr)
+			// helper.ErrorPanic(parseErr)
+
+			webResponse = response.Response{
+				Code:   http.StatusBadRequest,
+				Status: http.StatusText(http.StatusBadRequest),
+				Data:   nil,
+				// Message: parseErr.Error(),
+				Message: "parseErr",
+			}
+
+			// ctx.Header("Content-Type", "application/json")
+			// ctx.JSON(http.StatusBadRequest, webResponse)
+			// ctx.AbortWithStatus(http.StatusBadRequest)
+			ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
+			return
+
 		}
 
 		if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok {
