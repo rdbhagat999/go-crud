@@ -50,9 +50,11 @@ func (controller *PostController) Create(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusBadRequest),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -66,9 +68,11 @@ func (controller *PostController) Create(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 
 	}
@@ -97,9 +101,11 @@ func (controller *PostController) Create(ctx *gin.Context) {
 			Message: createErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -138,9 +144,11 @@ func (controller *PostController) Update(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusBadRequest),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -154,9 +162,11 @@ func (controller *PostController) Update(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 
 	}
@@ -179,9 +189,11 @@ func (controller *PostController) Update(ctx *gin.Context) {
 			Message: paramErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 	}
 
@@ -197,9 +209,11 @@ func (controller *PostController) Update(ctx *gin.Context) {
 			Message: foundErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 	}
 
@@ -211,9 +225,11 @@ func (controller *PostController) Update(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 	}
 
@@ -229,9 +245,11 @@ func (controller *PostController) Update(ctx *gin.Context) {
 			Message: updateErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -269,9 +287,11 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusBadRequest),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -285,9 +305,11 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 
 	}
@@ -306,9 +328,11 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 			Message: paramErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -324,9 +348,11 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 			Message: findErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -338,9 +364,11 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 
 	}
@@ -382,9 +410,11 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 			Message: paramErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -400,9 +430,11 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 			Message: findErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -415,9 +447,11 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 			Message: "post not found",
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusNotFound, webResponse)
-		ctx.AbortWithStatus(http.StatusNotFound)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusNotFound, webResponse)
+		// ctx.AbortWithStatus(http.StatusNotFound)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, webResponse)
+
 		return
 	}
 
@@ -453,15 +487,17 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 			Message: listErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
+		// ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)
 		ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   posts,
 	}
 
@@ -490,9 +526,11 @@ func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusBadRequest),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -506,9 +544,11 @@ func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
 		return
 
 	}
@@ -525,15 +565,17 @@ func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 			Message: listErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   posts,
 	}
 

@@ -2,12 +2,12 @@ package controller
 
 import (
 	"fmt"
+	"go-crud/src/constants"
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
 	"go-crud/src/service"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
@@ -56,9 +56,11 @@ func (controller *UserController) Create(ctx *gin.Context) {
 			Message: createErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 	}
 
@@ -95,9 +97,10 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 			Message: http.StatusText(http.StatusUnauthorized),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusUnauthorized, webResponse)
-		ctx.AbortWithStatus(http.StatusUnauthorized)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
 		return
 
 	}
@@ -114,9 +117,11 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 			Message: userErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -182,9 +187,11 @@ func (controller *UserController) Login(ctx *gin.Context) {
 			Message: userErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -196,8 +203,7 @@ func (controller *UserController) Login(ctx *gin.Context) {
 		// ID:        strconv.Itoa(int(user.ID)),
 	})
 
-	println("TOKEN_SECRET", os.Getenv("TOKEN_SECRET"))
-	tokenString, tokenErr := token.SignedString([]byte(os.Getenv("TOKEN_SECRET")))
+	tokenString, tokenErr := token.SignedString([]byte(helper.GetEnvVariable(constants.TOKEN_SECRET)))
 	// helper.ErrorPanic(tokenErr)
 
 	if tokenErr != nil {
@@ -210,16 +216,18 @@ func (controller *UserController) Login(ctx *gin.Context) {
 			Message: tokenErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
 
-	maxAge, _ := strconv.Atoi(os.Getenv("TOKEN_MAX_AGE"))
+	maxAge, _ := strconv.Atoi(helper.GetEnvVariable(constants.TOKEN_MAX_AGE))
 
-	ctx.SetCookie("jwt", tokenString, maxAge, "/", "localhost", false, true)
+	ctx.SetCookie(constants.AUTH_COOKIE_NAME, "bearer "+tokenString, maxAge, "/", "localhost", false, true)
 
 	webResponse := response.Response{
 		Code:    http.StatusOK,
@@ -263,9 +271,11 @@ func (controller *UserController) Update(ctx *gin.Context) {
 			Message: paramErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -284,9 +294,11 @@ func (controller *UserController) Update(ctx *gin.Context) {
 			Message: userErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -326,9 +338,11 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 			Message: paramErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -337,7 +351,7 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   nil,
 	}
 
@@ -370,9 +384,11 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 			Message: paramErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -389,9 +405,11 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 			Message: userErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
@@ -405,15 +423,17 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 			Message: "user not found",
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusNotFound, webResponse)
-		ctx.AbortWithStatus(http.StatusNotFound)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusNotFound, webResponse)
+		// ctx.AbortWithStatus(http.StatusNotFound)
+		ctx.AbortWithStatusJSON(http.StatusNotFound, webResponse)
+
 		return
 	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   user,
 	}
 
@@ -443,16 +463,18 @@ func (controller *UserController) FindAll(ctx *gin.Context) {
 			Message: usersErr.Error(),
 		}
 
-		ctx.Header("Content-Type", "application/json")
-		ctx.JSON(http.StatusBadRequest, webResponse)
-		ctx.AbortWithStatus(http.StatusBadRequest)
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusBadRequest, webResponse)
+		// ctx.AbortWithStatus(http.StatusBadRequest)
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+
 		return
 
 	}
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   users,
 	}
 

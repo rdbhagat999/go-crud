@@ -4,6 +4,7 @@ import (
 	"fmt"
 	_ "go-crud/docs"
 	"go-crud/src/config"
+	"go-crud/src/constants"
 	"go-crud/src/controller"
 	"go-crud/src/dsa"
 	"go-crud/src/helper"
@@ -78,8 +79,8 @@ func main() {
 
 	db := config.DatabaseConnection(&loadConfig)
 
-	db.Table("posts").AutoMigrate(&model.Post{})
-	db.Table("users").AutoMigrate(&model.User{})
+	db.Table(constants.PostTable).AutoMigrate(&model.Post{})
+	db.Table(constants.UserTable).AutoMigrate(&model.User{})
 
 	validate := validator.New()
 
@@ -97,32 +98,32 @@ func main() {
 
 	router, apiVersion1 := router.NewRouter()
 
-	authRouter := apiVersion1.Group("/auth")
-	authRouter.POST("/register", userController.Create)
-	authRouter.POST("/login", userController.Login)
-	authRouter.POST("/logout", userController.Logout)
+	authRouter := apiVersion1.Group(constants.AuthGroup)
+	authRouter.POST(constants.RegisterRoute, userController.Create)
+	authRouter.POST(constants.LoginRoute, userController.Login)
+	authRouter.POST(constants.LogoutRoute, userController.Logout)
 
-	uploadRouter := apiVersion1.Group("/upload")
-	uploadRouter.POST("/", controller.UploadFile)
+	uploadRouter := apiVersion1.Group(constants.UploadGroup)
+	uploadRouter.POST(constants.UploadFileRoute, controller.UploadFile)
 
-	userRouter := apiVersion1.Group("/users")
+	userRouter := apiVersion1.Group(constants.UserGroup)
 	userRouter.Use(middlewares.JWTAuthMiddleware(userController))
 
-	userRouter.GET("/", userController.FindAll)
-	userRouter.GET("/:userId", userController.FindById)
-	userRouter.GET("/authuser", userController.AuthUser)
-	userRouter.PUT("/:userId", userController.Update)
-	userRouter.DELETE("/:userId", userController.Delete)
+	userRouter.GET(constants.GetAllUsersRoute, userController.FindAll)
+	userRouter.GET(constants.GetUserByIdRoute, userController.FindById)
+	userRouter.GET(constants.GetAuthUserRoute, userController.AuthUser)
+	userRouter.PUT(constants.UpdateUserRoute, userController.Update)
+	userRouter.DELETE(constants.DeleteUserRoute, userController.Delete)
 
-	postRouter := apiVersion1.Group("/posts")
+	postRouter := apiVersion1.Group(constants.PostGroup)
 	postRouter.Use(middlewares.JWTAuthMiddleware(userController))
 
-	postRouter.GET("/", postController.FindAll)
-	postRouter.GET("/userposts", postController.FindAllByUserId)
-	postRouter.GET("/:postId", postController.FindById)
-	postRouter.POST("/", postController.Create)
-	postRouter.PUT("/:postId", postController.Update)
-	postRouter.DELETE("/:postId", postController.Delete)
+	postRouter.GET(constants.GetAllPostsRoute, postController.FindAll)
+	postRouter.GET(constants.GetPostsByUserRoute, postController.FindAllByUserId)
+	postRouter.GET(constants.GetPostByIdRoute, postController.FindById)
+	postRouter.POST(constants.CreatePostRoute, postController.Create)
+	postRouter.PUT(constants.UpdatePostRoute, postController.Update)
+	postRouter.DELETE(constants.DeletePostRoute, postController.Delete)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.SERVER_PORT,
