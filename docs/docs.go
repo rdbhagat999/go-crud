@@ -439,6 +439,7 @@ const docTemplate = `{
                 "name",
                 "password",
                 "phone",
+                "role_id",
                 "username"
             ],
             "properties": {
@@ -466,6 +467,11 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 15,
                     "minLength": 10
+                },
+                "role_id": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1
                 },
                 "username": {
                     "type": "string",
