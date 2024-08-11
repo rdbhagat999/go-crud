@@ -82,6 +82,7 @@ func main() {
 
 	db.Table(constants.PostTable).AutoMigrate(&model.Post{})
 	db.Table(constants.UserTable).AutoMigrate(&model.User{})
+	db.Table(constants.RoleTable).AutoMigrate(&model.Role{})
 
 	validate := validator.New()
 
@@ -127,7 +128,7 @@ func main() {
 	postRouter.PUT(constants.UpdatePostRoute, postController.Update)
 	postRouter.DELETE(constants.DeletePostRoute, postController.Delete)
 
-	cartRouter := apiVersion1.Group("cart")
+	cartRouter := apiVersion1.Group(constants.CartGroup)
 	cartRouter.Use(middlewares.JWTAuthMiddleware(userController))
 	cartRouter.GET(constants.GetCartByUserIdRoute, externalController.GetCartByUserId)
 

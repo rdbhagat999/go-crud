@@ -6,6 +6,7 @@ import (
 	"go-crud/src/controller"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
+	"go-crud/src/model"
 	"net/http"
 	"strconv"
 	"strings"
@@ -81,7 +82,7 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 			return
 		}
 
-		token, parseErr := jwt.ParseWithClaims(tokenFields[1], &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		token, parseErr := jwt.ParseWithClaims(tokenFields[1], &model.MyCustomJWTClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(helper.GetEnvVariable(constants.TOKEN_SECRET)), nil
 		})
 
@@ -106,7 +107,7 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 
 		}
 
-		if claims, ok := token.Claims.(*jwt.RegisteredClaims); ok {
+		if claims, ok := token.Claims.(*model.MyCustomJWTClaims); ok {
 
 			expiresAt = claims.ExpiresAt
 
@@ -128,12 +129,16 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 			}
 
 			fmt.Println("claims.Issuer: ", claims.Issuer)
-			intId, err := strconv.Atoi(claims.Issuer)
+			fmt.Println("claims.user_id: ", claims.UserID)
+			fmt.Println("claims.role_id: ", claims.RoleID)
+			intId, intIdErr := strconv.Atoi(claims.UserID)
+			intRole, roleIdErr := strconv.Atoi(claims.RoleID)
 			fmt.Println("intId: ", intId)
+			fmt.Println("intRole: ", intRole)
 
 			userId = intId
 
-			if intId == 0 {
+			if intId == 0 || intRole == 0 {
 				webResponse = response.Response{
 					Code:    http.StatusBadRequest,
 					Status:  http.StatusText(http.StatusBadRequest),
@@ -149,12 +154,28 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 				return
 			}
 
-			if err != nil {
+			if intIdErr != nil {
 				webResponse = response.Response{
 					Code:    http.StatusBadRequest,
 					Status:  http.StatusText(http.StatusBadRequest),
 					Data:    nil,
-					Message: err.Error(),
+					Message: intIdErr.Error(),
+				}
+
+				// ctx.Header("Content-Type", "application/json")
+				// ctx.JSON(http.StatusBadRequest, webResponse)
+				// ctx.AbortWithStatus(http.StatusUnauthorized)
+				ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+				return
+			}
+
+			if roleIdErr != nil {
+				webResponse = response.Response{
+					Code:    http.StatusBadRequest,
+					Status:  http.StatusText(http.StatusBadRequest),
+					Data:    nil,
+					Message: roleIdErr.Error(),
 				}
 
 				// ctx.Header("Content-Type", "application/json")
@@ -206,7 +227,9 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 		}
 
 		ctx.Header("X-USER-ID", strconv.Itoa(user.ID))
+		ctx.Header("X-ROLE-ID", strconv.Itoa(user.RoleID))
 		ctx.Set("userId", user.ID)
+		ctx.Set("roleId", user.RoleID)
 
 		ctx.Next()
 	}

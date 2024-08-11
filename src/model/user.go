@@ -15,6 +15,7 @@ type User struct {
 	Age       int            `gorm:"type:int" json:"age"`
 	Email     string         `gorm:"type:varchar(255);uniqueIndex" json:"email"`
 	Phone     string         `gorm:"type:varchar(255);uniqueIndex" json:"phone"`
+	RoleID    *int           `gorm:"type:int;default:1" json:"role_id"`
 	Posts     []Post         `gorm:"foreignKey:UserID;constraint:OnUpdate:CASCADE,OnDelete:SET NULL;" json:"posts"`
 	CreatedAt time.Time      `json:"created_at"`
 	UpdatedAt time.Time      `json:"updated_at"`
