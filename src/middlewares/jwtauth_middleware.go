@@ -27,7 +27,7 @@ func JWTAuthMiddleware(controller *controller.UserController) gin.HandlerFunc {
 		var expiresAt *jwt.NumericDate
 		var userId int
 
-		jwtString, errNoCookie := ctx.Cookie("jwt")
+		jwtString, errNoCookie := ctx.Cookie("JWT")
 		// helper.ErrorPanic(errNoCookie)
 
 		if errNoCookie != nil {

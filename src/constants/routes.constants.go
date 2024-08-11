@@ -39,3 +39,8 @@ const (
 const (
 	UploadFileRoute = "/"
 )
+
+// external API routes
+const (
+	GetCartByUserIdRoute = "/cartbyuser"
+)

@@ -172,6 +172,19 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Register user
+  /cart/cartbyuser:
+    get:
+      consumes:
+      - application/json
+      description: Fetches cart by userId from external API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Get cart by userId
   /posts:
     get:
       consumes:
