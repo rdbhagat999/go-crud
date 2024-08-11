@@ -151,7 +151,7 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 // @Router  /auth/logout [POST]
 func (controller *UserController) Logout(ctx *gin.Context) {
 
-	ctx.SetCookie("jwt", "", int(-1), "/", "localhost", false, true)
+	ctx.SetCookie(constants.AUTH_COOKIE_NAME, "", int(-1), "/", "localhost", false, true)
 
 	webResponse := response.Response{
 		Code:    http.StatusOK,
