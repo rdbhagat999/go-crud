@@ -115,7 +115,7 @@ func (controller *PostController) Create(ctx *gin.Context) {
 		Data:   post,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -259,7 +259,7 @@ func (controller *PostController) Update(ctx *gin.Context) {
 		Data:   post,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -381,7 +381,7 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 		Data:   nil,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -461,7 +461,7 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 		Data:   post,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -501,7 +501,7 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 		Data:   posts,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 }
 
@@ -579,6 +579,6 @@ func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 		Data:   posts,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 }

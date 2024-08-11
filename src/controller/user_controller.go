@@ -71,7 +71,7 @@ func (controller *UserController) Create(ctx *gin.Context) {
 		Message: "User registered successfully",
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -132,7 +132,7 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 		Data:   user,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -156,7 +156,7 @@ func (controller *UserController) Logout(ctx *gin.Context) {
 		Message: "logout successfull",
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -236,7 +236,7 @@ func (controller *UserController) Login(ctx *gin.Context) {
 		Message: "Login successful",
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -309,7 +309,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 		Data:   user,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -355,7 +355,7 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 		Data:   nil,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -437,7 +437,7 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 		Data:   user,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 
 }
@@ -478,6 +478,6 @@ func (controller *UserController) FindAll(ctx *gin.Context) {
 		Data:   users,
 	}
 
-	ctx.Header("Content-Type", "application/json")
+	// ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 }

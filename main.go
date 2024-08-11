@@ -7,6 +7,7 @@ import (
 	"go-crud/src/constants"
 	"go-crud/src/controller"
 	"go-crud/src/dsa"
+	"go-crud/src/external"
 	"go-crud/src/helper"
 	"go-crud/src/middlewares"
 	"go-crud/src/model"
@@ -95,6 +96,7 @@ func main() {
 	//Init Controller
 	postController := controller.NewPostController(postService)
 	userController := controller.NewUserController(userService)
+	externalController := external.NewExternalController()
 
 	router, apiVersion1 := router.NewRouter()
 
@@ -124,6 +126,10 @@ func main() {
 	postRouter.POST(constants.CreatePostRoute, postController.Create)
 	postRouter.PUT(constants.UpdatePostRoute, postController.Update)
 	postRouter.DELETE(constants.DeletePostRoute, postController.Delete)
+
+	cartRouter := apiVersion1.Group("cart")
+	cartRouter.Use(middlewares.JWTAuthMiddleware(userController))
+	cartRouter.GET(constants.GetCartByUserIdRoute, externalController.GetCartByUserId)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.SERVER_PORT,

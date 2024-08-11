@@ -91,6 +91,26 @@
                 }
             }
         },
+        "/cart/cartbyuser": {
+            "get": {
+                "description": "Fetches cart by userId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get cart by userId",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/posts": {
             "get": {
                 "description": "Returns a list of post",
