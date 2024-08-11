@@ -420,6 +420,28 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /users/{userId} [GET]
 func (controller *UserController) FindById(ctx *gin.Context) {
+	user_id, userExists := ctx.Get("userId")
+	roleId, roleExists := ctx.Get("roleId")
+	fmt.Printf("AuthUserId: %v", user_id)
+	fmt.Printf("RoleId: %v", roleId)
+
+	if !userExists || !roleExists {
+
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+		return
+
+	}
+
 	userId := ctx.Param("userId")
 	id, paramErr := strconv.Atoi(userId)
 	// helper.ErrorPanic(paramErr)
@@ -501,6 +523,57 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /users [GET]
 func (controller *UserController) FindAll(ctx *gin.Context) {
+
+	user_id, userExists := ctx.Get("userId")
+	roleId, roleExists := ctx.Get("roleId")
+	fmt.Printf("AuthUserId: %v", user_id)
+	fmt.Printf("RoleId: %v", roleId)
+
+	if !userExists || !roleExists {
+
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		// ctx.Header("Content-Type", "application/json")
+		// ctx.JSON(http.StatusUnauthorized, webResponse)
+		// ctx.AbortWithStatus(http.StatusUnauthorized)
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+		return
+
+	}
+
+	intRole := roleId.(int)
+
+	if intRole == 0 {
+		webResponse := response.Response{
+			Code:    http.StatusBadRequest,
+			Status:  http.StatusText(http.StatusBadRequest),
+			Data:    nil,
+			Message: http.StatusText(http.StatusBadRequest),
+		}
+
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+		return
+	}
+
+	if intRole != 2 {
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: "Only admins can access user list",
+		}
+
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+		return
+	}
+
 	users, usersErr := controller.UserService.FindAll()
 
 	if usersErr != nil {
