@@ -62,7 +62,7 @@ func UploadFile(ctx *gin.Context) {
 	// 	}
 	// }
 
-	// ctx.JSON(http.StatusOK, gin.H{"message": "Files uploaded successfully"})
+	// ctx.JSON(http.StatusOK, gin.H{"message": "Files uploaded successfuly"})
 
 	name := ctx.PostForm("name")
 	email := ctx.PostForm("email")
@@ -87,6 +87,6 @@ func UploadFile(ctx *gin.Context) {
 		}
 	}
 
-	ctx.String(http.StatusOK, "Uploaded successfully %d files with fields name=%s and email=%s.", len(files), name, email)
+	ctx.String(http.StatusOK, "Uploaded successfuly %d files with fields name=%s and email=%s.", len(files), name, email)
 
 }

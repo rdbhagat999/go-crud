@@ -7,6 +7,7 @@ type UserResponse struct {
 	Name     string       `json:"name"`
 	Username string       `json:"username"`
 	Age      int          `json:"age"`
+	RoleID   int          `json:"role_id"`
 	Email    string       `json:"email"`
 	Phone    string       `json:"phone"`
 	Posts    []model.Post `json:"posts"`

@@ -6,6 +6,7 @@ import (
 	"go-crud/src/data/request"
 	"go-crud/src/data/response"
 	"go-crud/src/helper"
+	"go-crud/src/model"
 	"go-crud/src/service"
 	"net/http"
 	"strconv"
@@ -40,6 +41,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Router  /auth/register [POST]
 func (controller *UserController) Create(ctx *gin.Context) {
 	createUserRequest := request.CreateUserRequest{}
+	createUserRequest.RoleID = 1
 	err := ctx.ShouldBindJSON(&createUserRequest)
 	helper.ErrorPanic(err)
 
@@ -68,7 +70,7 @@ func (controller *UserController) Create(ctx *gin.Context) {
 		Code:    http.StatusOK,
 		Status:  "Ok",
 		Data:    user,
-		Message: "User registered successfully",
+		Message: "User registered successfuly",
 	}
 
 	// ctx.Header("Content-Type", "application/json")
@@ -86,9 +88,11 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Router  /users/authuser [GET]
 func (controller *UserController) AuthUser(ctx *gin.Context) {
 	userId, userExists := ctx.Get("userId")
+	roleId, roleExists := ctx.Get("roleId")
 	fmt.Printf("AuthUserId: %v", userId)
+	fmt.Printf("RoleId: %v", roleId)
 
-	if !userExists {
+	if !userExists || !roleExists {
 
 		webResponse := response.Response{
 			Code:    http.StatusUnauthorized,
@@ -147,13 +151,13 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 // @Router  /auth/logout [POST]
 func (controller *UserController) Logout(ctx *gin.Context) {
 
-	ctx.SetCookie("jwt", "", int(-1), "/", "localhost", false, true)
+	ctx.SetCookie(constants.AUTH_COOKIE_NAME, "", int(-1), "/", "localhost", false, true)
 
 	webResponse := response.Response{
 		Code:    http.StatusOK,
 		Status:  "Ok",
 		Data:    nil,
-		Message: "logout successfull",
+		Message: "logout successful",
 	}
 
 	// ctx.Header("Content-Type", "application/json")
@@ -196,12 +200,16 @@ func (controller *UserController) Login(ctx *gin.Context) {
 
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
-		// Also fixed dates can be used for the NumericDate
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-		Issuer:    strconv.Itoa(user.ID),
-		// ID:        strconv.Itoa(int(user.ID)),
-	})
+	claims := model.MyCustomJWTClaims{
+		UserID: strconv.Itoa(user.ID),
+		RoleID: strconv.Itoa(user.RoleID),
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			Issuer:    "go-crud",
+		},
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	tokenString, tokenErr := token.SignedString([]byte(helper.GetEnvVariable(constants.TOKEN_SECRET)))
 	// helper.ErrorPanic(tokenErr)
@@ -258,17 +266,38 @@ func (controller *UserController) Update(ctx *gin.Context) {
 	helper.ErrorPanic(err)
 
 	userId := ctx.Param("userId")
-	id, paramErr := strconv.Atoi(userId)
+	ctx_user_Id, userIdExists := ctx.Get("userId")
+	roleId, roleExists := ctx.Get("roleId")
+	user_id, userParamErr := strconv.Atoi(userId)
 	// helper.ErrorPanic(paramErr)
 
-	if paramErr != nil {
-		userControllerPrintln(paramErr)
-		// helper.ErrorPanic(paramErr)
+	fmt.Printf("user_id: %v", user_id)
+	fmt.Printf("ctx_user_Id: %v", ctx_user_Id)
+	fmt.Printf("RoleId: %v", roleId)
+
+	if !userIdExists || !roleExists {
+		// helper.ErrorPanic(userIdExists)
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+		return
+
+	}
+
+	if userParamErr != nil {
+		userControllerPrintln(userParamErr)
+		// helper.ErrorPanic(userParamErr)
 		webResponse := response.Response{
 			Code:    http.StatusBadRequest,
 			Status:  http.StatusText(http.StatusBadRequest),
 			Data:    nil,
-			Message: paramErr.Error(),
+			Message: userParamErr.Error(),
 		}
 
 		// ctx.Header("Content-Type", "application/json")
@@ -282,7 +311,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 	// updateUserRequest.ID = id
 
-	user, userErr := controller.UserService.Update(id, updateUserRequest)
+	user, userErr := controller.UserService.Update(user_id, updateUserRequest)
 
 	if userErr != nil {
 		userControllerPrintln(userErr)
@@ -324,8 +353,29 @@ func (controller *UserController) Update(ctx *gin.Context) {
 // @Success  200 {object} response.Response{}
 // @Router  /users/{userId} [DELETE]
 func (controller *UserController) Delete(ctx *gin.Context) {
+	ctx_user_Id, userIdExists := ctx.Get("userId")
+	roleId, roleExists := ctx.Get("roleId")
 	userId := ctx.Param("userId")
 	id, paramErr := strconv.Atoi(userId)
+
+	fmt.Printf("id: %v", id)
+	fmt.Printf("ctx_user_Id: %v", ctx_user_Id)
+	fmt.Printf("RoleId: %v", roleId)
+
+	if !userIdExists || !roleExists {
+		// helper.ErrorPanic(userIdExists)
+		webResponse := response.Response{
+			Code:    http.StatusUnauthorized,
+			Status:  http.StatusText(http.StatusUnauthorized),
+			Data:    nil,
+			Message: http.StatusText(http.StatusUnauthorized),
+		}
+
+		ctx.AbortWithStatusJSON(http.StatusUnauthorized, webResponse)
+
+		return
+
+	}
 	helper.ErrorPanic(paramErr)
 
 	if paramErr != nil {

@@ -36,6 +36,10 @@ definitions:
         maxLength: 15
         minLength: 10
         type: string
+      role_id:
+        maximum: 2
+        minimum: 1
+        type: integer
       username:
         maxLength: 200
         minLength: 5
@@ -46,6 +50,7 @@ definitions:
     - name
     - password
     - phone
+    - role_id
     - username
     type: object
   request.LoginUserRequest:

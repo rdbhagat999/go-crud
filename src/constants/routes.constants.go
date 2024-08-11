@@ -6,6 +6,7 @@ const (
 	UserGroup   = "/users"
 	PostGroup   = "/posts"
 	UploadGroup = "/uploads"
+	CartGroup   = "/cart"
 )
 
 // auth routes
