@@ -8,7 +8,7 @@ import (
 
 type Post struct {
 	ID        int            `gorm:"type:int UNSIGNED NOT NULL AUTO_INCREMENT;primaryKey" json:"id"`
-	Title     string         `gorm:"type:varchar(255);uniqueIndex" json:"title"`
+	Title     string         `gorm:"type:varchar(255);unique" json:"title"`
 	Body      string         `gorm:"type:varchar(255);" json:"body"`
 	UserID    int            `gorm:"type:int" json:"user_id"`
 	CreatedAt time.Time      `json:"created_at"`
