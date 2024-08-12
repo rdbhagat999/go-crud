@@ -19,7 +19,9 @@ import (
 func DatabaseConnection(config *Config) *gorm.DB {
 	sqlInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", config.DB_HOST, config.DB_PORT, config.DB_USER, config.DB_PASSWORD, config.DB_NAME)
 
-	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{})
+	db, err := gorm.Open(postgres.Open(sqlInfo), &gorm.Config{
+		TranslateError: true,
+	})
 
 	helper.ErrorPanic(err)
 

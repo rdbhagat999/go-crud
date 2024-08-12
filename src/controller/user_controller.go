@@ -52,16 +52,13 @@ func (controller *UserController) Create(ctx *gin.Context) {
 		userControllerPrintln(createErr)
 
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusInternalServerError,
+			Status:  http.StatusText(http.StatusInternalServerError),
 			Data:    nil,
-			Message: createErr.Error(),
+			Message: helper.HandleError(createErr),
 		}
 
-		// ctx.Header("Content-Type", "application/json")
-		// ctx.JSON(http.StatusBadRequest, webResponse)
-		// ctx.AbortWithStatus(http.StatusBadRequest)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, webResponse)
 
 		return
 	}
@@ -115,16 +112,13 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 		userControllerPrintln(userErr)
 		// helper.ErrorPanic(userErr)
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusInternalServerError,
+			Status:  http.StatusText(http.StatusInternalServerError),
 			Data:    nil,
-			Message: userErr.Error(),
+			Message: helper.HandleError(userErr),
 		}
 
-		// ctx.Header("Content-Type", "application/json")
-		// ctx.JSON(http.StatusBadRequest, webResponse)
-		// ctx.AbortWithStatus(http.StatusBadRequest)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, webResponse)
 
 		return
 
@@ -185,16 +179,13 @@ func (controller *UserController) Login(ctx *gin.Context) {
 		userControllerPrintln(userErr)
 		// helper.ErrorPanic(userErr)
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusInternalServerError,
+			Status:  http.StatusText(http.StatusInternalServerError),
 			Data:    nil,
-			Message: userErr.Error(),
+			Message: helper.HandleError(userErr),
 		}
 
-		// ctx.Header("Content-Type", "application/json")
-		// ctx.JSON(http.StatusBadRequest, webResponse)
-		// ctx.AbortWithStatus(http.StatusBadRequest)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, webResponse)
 
 		return
 
@@ -317,16 +308,13 @@ func (controller *UserController) Update(ctx *gin.Context) {
 		userControllerPrintln(userErr)
 		// helper.ErrorPanic(userErr)
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusInternalServerError,
+			Status:  http.StatusText(http.StatusInternalServerError),
 			Data:    nil,
-			Message: userErr.Error(),
+			Message: helper.HandleError(userErr),
 		}
 
-		// ctx.Header("Content-Type", "application/json")
-		// ctx.JSON(http.StatusBadRequest, webResponse)
-		// ctx.AbortWithStatus(http.StatusBadRequest)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, webResponse)
 
 		return
 
@@ -471,16 +459,13 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 		userControllerPrintln(userErr)
 		// helper.ErrorPanic(userErr)
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusInternalServerError,
+			Status:  http.StatusText(http.StatusInternalServerError),
 			Data:    nil,
-			Message: userErr.Error(),
+			Message: helper.HandleError(userErr),
 		}
 
-		// ctx.Header("Content-Type", "application/json")
-		// ctx.JSON(http.StatusBadRequest, webResponse)
-		// ctx.AbortWithStatus(http.StatusBadRequest)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, webResponse)
 
 		return
 
@@ -580,16 +565,13 @@ func (controller *UserController) FindAll(ctx *gin.Context) {
 		userControllerPrintln(usersErr)
 		// helper.ErrorPanic(usersErr)
 		webResponse := response.Response{
-			Code:    http.StatusBadRequest,
-			Status:  http.StatusText(http.StatusBadRequest),
+			Code:    http.StatusInternalServerError,
+			Status:  http.StatusText(http.StatusInternalServerError),
 			Data:    nil,
-			Message: usersErr.Error(),
+			Message: helper.HandleError(usersErr),
 		}
 
-		// ctx.Header("Content-Type", "application/json")
-		// ctx.JSON(http.StatusBadRequest, webResponse)
-		// ctx.AbortWithStatus(http.StatusBadRequest)
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, webResponse)
+		ctx.AbortWithStatusJSON(http.StatusInternalServerError, webResponse)
 
 		return
 
