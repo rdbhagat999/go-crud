@@ -4,8 +4,40 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"sort"
 	"time"
 )
+
+type Human struct {
+	// sort a slice of custom structs
+	name string
+	age  int
+}
+
+type AgeFactor []Human
+
+func (a AgeFactor) Len() int {
+	return len(a)
+}
+
+func (a AgeFactor) Less(i, j int) bool {
+	return a[i].age < a[j].age
+}
+
+func (a AgeFactor) Swap(i, j int) {
+	a[i], a[j] = a[j], a[i]
+}
+
+func SortCustomSliceHumanStruct() {
+	audience := []Human{
+		{"Alice", 35},
+		{"Bob", 45},
+		{"James", 15},
+		{"Heidi", 25},
+	}
+	sort.Sort(AgeFactor(audience))
+	fmt.Println(audience)
+}
 
 type Stack struct {
 	// Write a program to implement a stack using an array.

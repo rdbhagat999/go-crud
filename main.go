@@ -71,6 +71,8 @@ func main() {
 
 	dsa.CallGoRoutine("6 Message from Goroutine using channel")
 
+	dsa.SortCustomSliceHumanStruct()
+
 	log.Info().Msg("Server started")
 
 	loadConfig, err := config.LoadConfig()
