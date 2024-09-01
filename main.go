@@ -22,24 +22,24 @@ import (
 )
 
 func greetFunction() {
-	fmt.Println("Inside greetFunction")
+	fmt.Println("5 Inside greetFunction")
 	fmt.Println("Hello world!")
 }
 
 func calFactorialFunction() {
-	fmt.Println("Inside calFactorialFunction")
+	fmt.Println("4 Inside calFactorialFunction")
 	factorial := dsa.FactorialRecursive(5)
 	println("factorial: ", factorial)
 }
 
 func calFibonacciFunction() {
-	fmt.Println("Inside calFibonacciFunction")
+	fmt.Println("3 Inside calFibonacciFunction")
 	fibonacci := dsa.FibonacciRecursive(5)
 	println("fibonacci: ", fibonacci)
 }
 
 func executeGreetFunction() {
-	fmt.Println("Inside executeGreetFunction")
+	fmt.Println("1 Inside executeGreetFunction")
 
 	defer greetFunction()
 	defer calFactorialFunction()
@@ -52,7 +52,7 @@ func triggerPanic() {
 
 	defer func() {
 		if err := recover(); err != nil {
-			fmt.Println("Recover from panic with message:", err)
+			fmt.Println("2 Recover from panic with message:", err)
 		}
 	}()
 
@@ -68,6 +68,8 @@ func triggerPanic() {
 func main() {
 
 	executeGreetFunction()
+
+	dsa.CallGoRoutine("6 Message from Goroutine using channel")
 
 	log.Info().Msg("Server started")
 
