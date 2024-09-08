@@ -140,6 +140,9 @@ func main() {
 	cartRouter := apiVersion1.Group(constants.CartGroup)
 	cartRouter.Use(middlewares.JWTAuthMiddleware(userController))
 	cartRouter.GET(constants.GetCartByUserIdRoute, externalController.GetCartByUserId)
+	cartRouter.POST(constants.AddCartByUserIdRoute, externalController.AddCardByUserId)
+	cartRouter.PUT(constants.UpdateCartByUserIdRoute, externalController.UpdateCardByUserId)
+	cartRouter.DELETE(constants.DeleteCartByIdRoute, externalController.DeleteCardById)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.SERVER_PORT,
