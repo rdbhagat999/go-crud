@@ -98,6 +98,19 @@ func (controller *ExternalController) GetCartByUserId(ctx *gin.Context) {
 
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusOK {
+		webResponse := response.Response{
+			Code:    resp.StatusCode,
+			Status:  http.StatusText(resp.StatusCode),
+			Data:    nil,
+			Message: http.StatusText(resp.StatusCode),
+		}
+
+		ctx.AbortWithStatusJSON(resp.StatusCode, webResponse)
+
+		return
+	}
+
 	var cart CartResponse
 
 	err = json.NewDecoder(resp.Body).Decode(&cart)
