@@ -31,15 +31,22 @@ func NewUserController(service service.UserService) *UserController {
 }
 
 // CreateUser godoc
-// @Summary  Register user
-// @Description  Save user in database
-// @Param  user body request.CreateUserRequest true "Create user"
+// @Summary Register user
+// @Message Register user
+// @ID CreateUser
+// @Description Save user in database
+// @Param user body request.CreateUserRequest true "Create user"
 // @Accept json
-// @Produce  json
-// @Tag  user
-// @Success  200 {object} response.Response{}
+// @Produce json
+// @Tag user
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /auth/register [POST]
 func (controller *UserController) Create(ctx *gin.Context) {
+	// @Param X-platform header string true "platform"
+	// responseTime := time.Now().Format("02/01/2006 15:04:05")
+
 	createUserRequest := request.CreateUserRequest{}
 	createUserRequest.RoleID = 1
 	err := ctx.ShouldBindJSON(&createUserRequest)
@@ -80,8 +87,10 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Description  Get user in database
 // @Accept json
 // @Produce  json
-// @Tag  user
-// @Success  200 {object} response.Response{}
+// @Tag user
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /users/authuser [GET]
 func (controller *UserController) AuthUser(ctx *gin.Context) {
 	userId, userExists := ctx.Get("userId")
@@ -141,7 +150,9 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 // @Accept json
 // @Produce  json
 // @Tag  user
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /auth/logout [POST]
 func (controller *UserController) Logout(ctx *gin.Context) {
 
@@ -166,7 +177,9 @@ func (controller *UserController) Logout(ctx *gin.Context) {
 // @Accept json
 // @Produce  json
 // @Tag  user
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /auth/login [POST]
 func (controller *UserController) Login(ctx *gin.Context) {
 	loginUserRequest := request.LoginUserRequest{}
@@ -248,7 +261,9 @@ func (controller *UserController) Login(ctx *gin.Context) {
 // @Accept json
 // @Produce  json
 // @Tag  user
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /users/{userId} [PUT]
 func (controller *UserController) Update(ctx *gin.Context) {
 
@@ -322,7 +337,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 	webResponse := response.Response{
 		Code:   http.StatusOK,
-		Status: "Ok",
+		Status: http.StatusText(http.StatusOK),
 		Data:   user,
 	}
 
@@ -338,7 +353,9 @@ func (controller *UserController) Update(ctx *gin.Context) {
 // @Accept json
 // @Produce  json
 // @Tag  user
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /users/{userId} [DELETE]
 func (controller *UserController) Delete(ctx *gin.Context) {
 	ctx_user_Id, userIdExists := ctx.Get("userId")
@@ -405,7 +422,9 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 // @Accept json
 // @Produce  json
 // @Tag  user
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /users/{userId} [GET]
 func (controller *UserController) FindById(ctx *gin.Context) {
 	user_id, userExists := ctx.Get("userId")
@@ -505,7 +524,9 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 // @Accept json
 // @Produce  json
 // @Tag  user
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /users [GET]
 func (controller *UserController) FindAll(ctx *gin.Context) {
 

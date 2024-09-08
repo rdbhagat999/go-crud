@@ -9,7 +9,11 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "termsOfService": "https://swagger.io/terms/",
+        "contact": {
+            "name": "Ramandeep Bhagat",
+            "email": "rdbhagat999@gmail.com"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -42,6 +46,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -62,6 +78,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -76,6 +104,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Register user",
+                "operationId": "CreateUser",
                 "parameters": [
                     {
                         "description": "Create user",
@@ -90,6 +119,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -127,9 +168,22 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Get all post",
+                "operationId": "FindAllPost",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -145,6 +199,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Create post",
+                "operationId": "CreatePost",
                 "parameters": [
                     {
                         "description": "Create post",
@@ -162,6 +217,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -176,9 +243,22 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Get all post by userId",
+                "operationId": "FindAllByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -196,6 +276,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Get a single post by its id",
+                "operationId": "FindByIdPost",
                 "parameters": [
                     {
                         "type": "string",
@@ -211,6 +292,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -223,6 +316,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Update post",
+                "operationId": "UpdatePost",
                 "parameters": [
                     {
                         "type": "string",
@@ -247,6 +341,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -259,6 +365,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "summary": "Delete post",
+                "operationId": "DeletePost",
                 "parameters": [
                     {
                         "type": "string",
@@ -271,6 +378,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -294,6 +413,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -311,6 +442,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -340,6 +483,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -379,6 +534,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -403,6 +570,18 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }

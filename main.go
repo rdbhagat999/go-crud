@@ -65,6 +65,11 @@ func triggerPanic() {
 
 // @host localhost:8888
 // @BasePath /api/v1
+
+// @termsOfService https://swagger.io/terms/
+
+// @contact.name Ramandeep Bhagat
+// @contact.email rdbhagat999@gmail.com
 func main() {
 
 	executeGreetFunction()

@@ -3,7 +3,11 @@
     "info": {
         "description": "A demo Service API in Golang using Gin Framework",
         "title": "Demo Service API",
-        "contact": {},
+        "termsOfService": "https://swagger.io/terms/",
+        "contact": {
+            "name": "Ramandeep Bhagat",
+            "email": "rdbhagat999@gmail.com"
+        },
         "version": "1.0.0"
     },
     "host": "localhost:8888",
@@ -36,6 +40,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -56,6 +72,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -70,6 +98,7 @@
                     "application/json"
                 ],
                 "summary": "Register user",
+                "operationId": "CreateUser",
                 "parameters": [
                     {
                         "description": "Create user",
@@ -84,6 +113,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -121,9 +162,22 @@
                     "application/json"
                 ],
                 "summary": "Get all post",
+                "operationId": "FindAllPost",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -139,6 +193,7 @@
                     "application/json"
                 ],
                 "summary": "Create post",
+                "operationId": "CreatePost",
                 "parameters": [
                     {
                         "description": "Create post",
@@ -156,6 +211,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -170,9 +237,22 @@
                     "application/json"
                 ],
                 "summary": "Get all post by userId",
+                "operationId": "FindAllByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -190,6 +270,7 @@
                     "application/json"
                 ],
                 "summary": "Get a single post by its id",
+                "operationId": "FindByIdPost",
                 "parameters": [
                     {
                         "type": "string",
@@ -205,6 +286,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -217,6 +310,7 @@
                     "application/json"
                 ],
                 "summary": "Update post",
+                "operationId": "UpdatePost",
                 "parameters": [
                     {
                         "type": "string",
@@ -241,6 +335,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -253,6 +359,7 @@
                     "application/json"
                 ],
                 "summary": "Delete post",
+                "operationId": "DeletePost",
                 "parameters": [
                     {
                         "type": "string",
@@ -265,6 +372,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -288,6 +407,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -305,6 +436,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -334,6 +477,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -373,6 +528,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -397,6 +564,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }

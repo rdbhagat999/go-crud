@@ -119,8 +119,11 @@ definitions:
     type: object
 host: localhost:8888
 info:
-  contact: {}
+  contact:
+    email: rdbhagat999@gmail.com
+    name: Ramandeep Bhagat
   description: A demo Service API in Golang using Gin Framework
+  termsOfService: https://swagger.io/terms/
   title: Demo Service API
   version: 1.0.0
 paths:
@@ -143,6 +146,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Login user
   /auth/logout:
     post:
@@ -156,12 +167,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Logout user
   /auth/register:
     post:
       consumes:
       - application/json
       description: Save user in database
+      operationId: CreateUser
       parameters:
       - description: Create user
         in: body
@@ -174,6 +194,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Register user
@@ -195,6 +223,7 @@ paths:
       consumes:
       - application/json
       description: Returns a list of post
+      operationId: FindAllPost
       produces:
       - application/json
       responses:
@@ -202,11 +231,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Get all post
     post:
       consumes:
       - application/json
       description: Save post in database
+      operationId: CreatePost
       parameters:
       - description: Create post
         in: body
@@ -221,12 +259,21 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Create post
   /posts/{postId}:
     delete:
       consumes:
       - application/json
       description: Delete post from database
+      operationId: DeletePost
       parameters:
       - description: Delete post by id
         in: path
@@ -240,11 +287,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Delete post
     get:
       consumes:
       - application/json
       description: Returns a single post when postId maches id
+      operationId: FindByIdPost
       parameters:
       - description: Find post by id
         in: path
@@ -258,11 +314,20 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Get a single post by its id
     put:
       consumes:
       - application/json
       description: Update and save post in database
+      operationId: UpdatePost
       parameters:
       - description: Update post by id
         in: path
@@ -282,17 +347,34 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Update post
   /posts/userposts:
     get:
       consumes:
       - application/json
       description: Returns a list of post
+      operationId: FindAllByUserId
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get all post by userId
@@ -306,6 +388,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get all users
@@ -327,6 +417,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Delete user
     get:
       consumes:
@@ -343,6 +441,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get a single user by its id
@@ -369,6 +475,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/response.Response'
       summary: Update user
   /users/authuser:
     get:
@@ -380,6 +494,14 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get authenticated user
