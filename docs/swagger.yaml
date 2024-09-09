@@ -155,6 +155,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Login user
+      tags:
+      - auth
   /auth/logout:
     post:
       consumes:
@@ -176,6 +178,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Logout user
+      tags:
+      - auth
   /auth/register:
     post:
       consumes:
@@ -205,6 +209,23 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Register user
+      tags:
+      - auth
+  /cart/addusercart:
+    post:
+      consumes:
+      - application/json
+      description: Create cart by userId from external API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Create cart by userId
+      tags:
+      - cart
   /cart/cartbyuser:
     get:
       consumes:
@@ -218,6 +239,38 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get cart by userId
+      tags:
+      - cart
+  /cart/deletecart:
+    delete:
+      consumes:
+      - application/json
+      description: Delete cart by cartId from external API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Delete cart by cartId
+      tags:
+      - cart
+  /cart/updateusercart:
+    put:
+      consumes:
+      - application/json
+      description: Update cart by cartId from external API
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: Update cart by cartId
+      tags:
+      - cart
   /posts:
     get:
       consumes:
@@ -240,6 +293,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get all post
+      tags:
+      - post
     post:
       consumes:
       - application/json
@@ -268,6 +323,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create post
+      tags:
+      - post
   /posts/{postId}:
     delete:
       consumes:
@@ -296,6 +353,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Delete post
+      tags:
+      - post
     get:
       consumes:
       - application/json
@@ -323,6 +382,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get a single post by its id
+      tags:
+      - post
     put:
       consumes:
       - application/json
@@ -356,6 +417,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update post
+      tags:
+      - post
   /posts/userposts:
     get:
       consumes:
@@ -378,6 +441,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get all post by userId
+      tags:
+      - post
   /users:
     get:
       consumes:
@@ -399,6 +464,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get all users
+      tags:
+      - user
   /users/{userId}:
     delete:
       consumes:
@@ -426,6 +493,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Delete user
+      tags:
+      - user
     get:
       consumes:
       - application/json
@@ -452,6 +521,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get a single user by its id
+      tags:
+      - user
     put:
       consumes:
       - application/json
@@ -484,6 +555,8 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update user
+      tags:
+      - user
   /users/authuser:
     get:
       consumes:
@@ -505,4 +578,6 @@ paths:
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get authenticated user
+      tags:
+      - user
 swagger: "2.0"

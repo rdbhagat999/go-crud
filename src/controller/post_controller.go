@@ -34,6 +34,7 @@ func postControllerPrintln(err error) {
 // @Param  post body request.CreatePostRequest true "Create post"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
@@ -131,6 +132,7 @@ func (controller *PostController) Create(ctx *gin.Context) {
 // @Param  post body request.UpdatePostRequest true "Update post"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
@@ -271,6 +273,7 @@ func (controller *PostController) Update(ctx *gin.Context) {
 // @Param  postId path string true "Delete post by id"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
@@ -384,6 +387,7 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 // @Param  postId path string true "Find post by id"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
@@ -457,6 +461,7 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 // @Description Returns a list of post
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
@@ -543,6 +548,7 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 // @Description Returns a list of post
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}

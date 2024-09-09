@@ -38,7 +38,7 @@ func NewUserController(service service.UserService) *UserController {
 // @Param user body request.CreateUserRequest true "Create user"
 // @Accept json
 // @Produce json
-// @Tag user
+// @Tags auth
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -87,7 +87,7 @@ func (controller *UserController) Create(ctx *gin.Context) {
 // @Description  Get user in database
 // @Accept json
 // @Produce  json
-// @Tag user
+// @Tags user
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -149,7 +149,7 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 // @Description  Logout user in database
 // @Accept json
 // @Produce  json
-// @Tag  user
+// @Tags auth
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -176,7 +176,7 @@ func (controller *UserController) Logout(ctx *gin.Context) {
 // @Param  user body request.LoginUserRequest true "Login user"
 // @Accept json
 // @Produce  json
-// @Tag  user
+// @Tags auth
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -260,7 +260,7 @@ func (controller *UserController) Login(ctx *gin.Context) {
 // @Param  user body request.UpdateUserRequest true "Update user"
 // @Accept json
 // @Produce  json
-// @Tag  user
+// @Tags user
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -352,7 +352,7 @@ func (controller *UserController) Update(ctx *gin.Context) {
 // @Param  userId path string true "Delete user by id"
 // @Accept json
 // @Produce  json
-// @Tag  user
+// @Tags user
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -421,7 +421,7 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 // @Param  userId path string true "Find user by id"
 // @Accept json
 // @Produce  json
-// @Tag  user
+// @Tags user
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}
@@ -523,7 +523,7 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 // @Description  Returns a list of users
 // @Accept json
 // @Produce  json
-// @Tag  user
+// @Tags user
 // @Success 200 {object} response.Response{}
 // @Failure 400 {object} response.Response{}
 // @Failure 500 {object} response.Response{}

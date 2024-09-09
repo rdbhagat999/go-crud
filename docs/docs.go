@@ -28,6 +28,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "Login user",
                 "parameters": [
                     {
@@ -71,6 +74,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "Logout user",
                 "responses": {
                     "200": {
@@ -102,6 +108,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "auth"
                 ],
                 "summary": "Register user",
                 "operationId": "CreateUser",
@@ -138,6 +147,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/cart/addusercart": {
+            "post": {
+                "description": "Create cart by userId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Create cart by userId",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/cart/cartbyuser": {
             "get": {
                 "description": "Fetches cart by userId from external API",
@@ -147,7 +179,56 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "cart"
+                ],
                 "summary": "Get cart by userId",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/deletecart": {
+            "delete": {
+                "description": "Delete cart by cartId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Delete cart by cartId",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/updateusercart": {
+            "put": {
+                "description": "Update cart by cartId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Update cart by cartId",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -166,6 +247,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "post"
                 ],
                 "summary": "Get all post",
                 "operationId": "FindAllPost",
@@ -197,6 +281,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "post"
                 ],
                 "summary": "Create post",
                 "operationId": "CreatePost",
@@ -242,6 +329,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Get all post by userId",
                 "operationId": "FindAllByUserId",
                 "responses": {
@@ -274,6 +364,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "post"
                 ],
                 "summary": "Get a single post by its id",
                 "operationId": "FindByIdPost",
@@ -314,6 +407,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "post"
                 ],
                 "summary": "Update post",
                 "operationId": "UpdatePost",
@@ -364,6 +460,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Delete post",
                 "operationId": "DeletePost",
                 "parameters": [
@@ -406,6 +505,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "user"
+                ],
                 "summary": "Get all users",
                 "responses": {
                     "200": {
@@ -438,6 +540,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "user"
+                ],
                 "summary": "Get authenticated user",
                 "responses": {
                     "200": {
@@ -469,6 +574,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Get a single user by its id",
                 "parameters": [
@@ -508,6 +616,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Update user",
                 "parameters": [
@@ -556,6 +667,9 @@ const docTemplate = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Delete user",
                 "parameters": [
