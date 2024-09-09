@@ -84,6 +84,8 @@ func (controller *UserController) Create(ctx *gin.Context) {
 
 // AuthUser godoc
 // @Summary  Get authenticated user
+// @Message Get authenticated user
+// @ID AuthUser
 // @Description  Get user in database
 // @Accept json
 // @Produce  json
@@ -146,6 +148,8 @@ func (controller *UserController) AuthUser(ctx *gin.Context) {
 
 // Logout godoc
 // @Summary  Logout user
+// @Message Logout user
+// @ID Logout
 // @Description  Logout user in database
 // @Accept json
 // @Produce  json
@@ -171,7 +175,9 @@ func (controller *UserController) Logout(ctx *gin.Context) {
 }
 
 // LoginUser godoc
-// @Summary  Login user
+// @Summary Login user
+// @Message Login user
+// @ID LoginUser
 // @Description  Login user in database
 // @Param  user body request.LoginUserRequest true "Login user"
 // @Accept json
@@ -255,6 +261,8 @@ func (controller *UserController) Login(ctx *gin.Context) {
 
 // UpdateUser godoc
 // @Summary  Update user
+// @Message Update user
+// @ID UpdateUser
 // @Description  Update and save user in database
 // @Param  userId path string true "Update user by id"
 // @Param  user body request.UpdateUserRequest true "Update user"
@@ -348,6 +356,8 @@ func (controller *UserController) Update(ctx *gin.Context) {
 
 // DeleteUser godoc
 // @Summary  Delete user
+// @Message Delete user
+// @ID DeleteUser
 // @Description  Delete user from database
 // @Param  userId path string true "Delete user by id"
 // @Accept json
@@ -417,6 +427,8 @@ func (controller *UserController) Delete(ctx *gin.Context) {
 
 // FindByIdUser godoc
 // @Summary  Get a single user by its id
+// @Message Get a single user by its id
+// @ID FindByIdUser
 // @Description  Returns a single user when userId maches id
 // @Param  userId path string true "Find user by id"
 // @Accept json
@@ -519,7 +531,9 @@ func (controller *UserController) FindById(ctx *gin.Context) {
 }
 
 // FindAllUser godoc
-// @Summary  Get all users
+// @Summary Get all users
+// @Message Get all users
+// @ID FindAllUser
 // @Description  Returns a list of users
 // @Accept json
 // @Produce  json

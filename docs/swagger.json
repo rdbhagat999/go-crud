@@ -26,6 +26,7 @@
                     "auth"
                 ],
                 "summary": "Login user",
+                "operationId": "LoginUser",
                 "parameters": [
                     {
                         "description": "Login user",
@@ -72,6 +73,7 @@
                     "auth"
                 ],
                 "summary": "Logout user",
+                "operationId": "Logout",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -154,9 +156,22 @@
                     "cart"
                 ],
                 "summary": "Create cart by userId",
+                "operationId": "AddCardByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -177,9 +192,22 @@
                     "cart"
                 ],
                 "summary": "Get cart by userId",
+                "operationId": "GetCartByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -200,9 +228,22 @@
                     "cart"
                 ],
                 "summary": "Delete cart by cartId",
+                "operationId": "DeleteCardById",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -223,9 +264,22 @@
                     "cart"
                 ],
                 "summary": "Update cart by cartId",
+                "operationId": "UpdateCardByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -503,6 +557,7 @@
                     "user"
                 ],
                 "summary": "Get all users",
+                "operationId": "FindAllUser",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -538,6 +593,7 @@
                     "user"
                 ],
                 "summary": "Get authenticated user",
+                "operationId": "AuthUser",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -573,6 +629,7 @@
                     "user"
                 ],
                 "summary": "Get a single user by its id",
+                "operationId": "FindByIdUser",
                 "parameters": [
                     {
                         "type": "string",
@@ -615,6 +672,7 @@
                     "user"
                 ],
                 "summary": "Update user",
+                "operationId": "UpdateUser",
                 "parameters": [
                     {
                         "type": "string",
@@ -666,6 +724,7 @@
                     "user"
                 ],
                 "summary": "Delete user",
+                "operationId": "DeleteUser",
                 "parameters": [
                     {
                         "type": "string",

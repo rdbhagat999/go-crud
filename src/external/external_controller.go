@@ -25,12 +25,16 @@ func ExternalControllerPrintln(err error) {
 }
 
 // GetCartByUserId godoc
+// @ID GetCartByUserId
+// @Message Get cart by userId
 // @Summary  Get cart by userId
 // @Description  Fetches cart by userId from external API
 // @Accept json
 // @Produce  json
 // @Tags cart
 // @Success  200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /cart/cartbyuser [GET]
 func (controller *ExternalController) GetCartByUserId(ctx *gin.Context) {
 
@@ -155,12 +159,16 @@ func (controller *ExternalController) GetCartByUserId(ctx *gin.Context) {
 }
 
 // AddCardByUserId godoc
-// @Summary  Create cart by userId
-// @Description  Create cart by userId from external API
+// @ID AddCardByUserId
+// @Message Create cart by userId
+// @Summary Create cart by userId
+// @Description Create cart by userId from external API
 // @Accept json
 // @Produce  json
 // @Tags cart
 // @Success  200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /cart/addusercart [POST]
 func (controller *ExternalController) AddCardByUserId(ctx *gin.Context) {
 
@@ -321,12 +329,16 @@ func (controller *ExternalController) AddCardByUserId(ctx *gin.Context) {
 }
 
 // UpdateCardByUserId godoc
-// @Summary  Update cart by cartId
-// @Description  Update cart by cartId from external API
+// @ID UpdateCardByUserId
+// @Message Update cart by userId
+// @Summary Update cart by cartId
+// @Description Update cart by cartId from external API
 // @Accept json
 // @Produce  json
 // @Tags cart
 // @Success  200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /cart/updateusercart [PUT]
 func (controller *ExternalController) UpdateCardByUserId(ctx *gin.Context) {
 
@@ -504,12 +516,16 @@ func (controller *ExternalController) UpdateCardByUserId(ctx *gin.Context) {
 }
 
 // DeleteCardById godoc
-// @Summary  Delete cart by cartId
+// @ID DeleteCardById
+// @Message Delete cart by userId
+// @Summary Delete cart by cartId
 // @Description  Delete cart by cartId from external API
 // @Accept json
 // @Produce  json
 // @Tags cart
 // @Success  200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /cart/deletecart [DELETE]
 func (controller *ExternalController) DeleteCardById(ctx *gin.Context) {
 

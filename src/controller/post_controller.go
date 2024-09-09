@@ -29,7 +29,8 @@ func postControllerPrintln(err error) {
 
 // CreatePost godoc
 // @ID CreatePost
-// @Summary  Create post
+// @Message Create post
+// @Summary Create post
 // @Description  Save post in database
 // @Param  post body request.CreatePostRequest true "Create post"
 // @Accept json
@@ -126,7 +127,8 @@ func (controller *PostController) Create(ctx *gin.Context) {
 
 // UpdatePost godoc
 // @ID UpdatePost
-// @Summary  Update post
+// @Message Update post
+// @Summary Update post
 // @Description  Update and save post in database
 // @Param  postId path string true "Update post by id"
 // @Param  post body request.UpdatePostRequest true "Update post"
@@ -268,7 +270,8 @@ func (controller *PostController) Update(ctx *gin.Context) {
 
 // DeletePost godoc
 // @ID DeletePost
-// @Summary  Delete post
+// @Message Delete post
+// @Summary Delete post
 // @Description  Delete post from database
 // @Param  postId path string true "Delete post by id"
 // @Accept json
