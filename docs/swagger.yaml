@@ -132,6 +132,7 @@ paths:
       consumes:
       - application/json
       description: Login user in database
+      operationId: LoginUser
       parameters:
       - description: Login user
         in: body
@@ -162,6 +163,7 @@ paths:
       consumes:
       - application/json
       description: Logout user in database
+      operationId: Logout
       produces:
       - application/json
       responses:
@@ -216,11 +218,20 @@ paths:
       consumes:
       - application/json
       description: Create cart by userId from external API
+      operationId: AddCardByUserId
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Create cart by userId
@@ -231,11 +242,20 @@ paths:
       consumes:
       - application/json
       description: Fetches cart by userId from external API
+      operationId: GetCartByUserId
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Get cart by userId
@@ -246,11 +266,20 @@ paths:
       consumes:
       - application/json
       description: Delete cart by cartId from external API
+      operationId: DeleteCardById
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Delete cart by cartId
@@ -261,11 +290,20 @@ paths:
       consumes:
       - application/json
       description: Update cart by cartId from external API
+      operationId: UpdateCardByUserId
       produces:
       - application/json
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/response.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/response.Response'
       summary: Update cart by cartId
@@ -448,6 +486,7 @@ paths:
       consumes:
       - application/json
       description: Returns a list of users
+      operationId: FindAllUser
       produces:
       - application/json
       responses:
@@ -471,6 +510,7 @@ paths:
       consumes:
       - application/json
       description: Delete user from database
+      operationId: DeleteUser
       parameters:
       - description: Delete user by id
         in: path
@@ -499,6 +539,7 @@ paths:
       consumes:
       - application/json
       description: Returns a single user when userId maches id
+      operationId: FindByIdUser
       parameters:
       - description: Find user by id
         in: path
@@ -527,6 +568,7 @@ paths:
       consumes:
       - application/json
       description: Update and save user in database
+      operationId: UpdateUser
       parameters:
       - description: Update user by id
         in: path
@@ -562,6 +604,7 @@ paths:
       consumes:
       - application/json
       description: Get user in database
+      operationId: AuthUser
       produces:
       - application/json
       responses:

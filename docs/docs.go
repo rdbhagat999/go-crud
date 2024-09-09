@@ -32,6 +32,7 @@ const docTemplate = `{
                     "auth"
                 ],
                 "summary": "Login user",
+                "operationId": "LoginUser",
                 "parameters": [
                     {
                         "description": "Login user",
@@ -78,6 +79,7 @@ const docTemplate = `{
                     "auth"
                 ],
                 "summary": "Logout user",
+                "operationId": "Logout",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -160,9 +162,22 @@ const docTemplate = `{
                     "cart"
                 ],
                 "summary": "Create cart by userId",
+                "operationId": "AddCardByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -183,9 +198,22 @@ const docTemplate = `{
                     "cart"
                 ],
                 "summary": "Get cart by userId",
+                "operationId": "GetCartByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -206,9 +234,22 @@ const docTemplate = `{
                     "cart"
                 ],
                 "summary": "Delete cart by cartId",
+                "operationId": "DeleteCardById",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -229,9 +270,22 @@ const docTemplate = `{
                     "cart"
                 ],
                 "summary": "Update cart by cartId",
+                "operationId": "UpdateCardByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -509,6 +563,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get all users",
+                "operationId": "FindAllUser",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -544,6 +599,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get authenticated user",
+                "operationId": "AuthUser",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -579,6 +635,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Get a single user by its id",
+                "operationId": "FindByIdUser",
                 "parameters": [
                     {
                         "type": "string",
@@ -621,6 +678,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Update user",
+                "operationId": "UpdateUser",
                 "parameters": [
                     {
                         "type": "string",
@@ -672,6 +730,7 @@ const docTemplate = `{
                     "user"
                 ],
                 "summary": "Delete user",
+                "operationId": "DeleteUser",
                 "parameters": [
                     {
                         "type": "string",
