@@ -43,6 +43,18 @@ func saveFile(fileHeader *multipart.FileHeader, key int) error {
 
 }
 
+// UploadFile godoc
+// @Summary Upload file
+// @Message Upload file
+// @ID UploadFile
+// @Tags uploads
+// @Produce json
+// @Param name formData string true "name"
+// @Param email formData string true "email"
+// @Param files formData file true "files"
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 func UploadFile(ctx *gin.Context) {
 	// form, err := ctx.MultipartForm()
 

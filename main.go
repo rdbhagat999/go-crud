@@ -65,6 +65,11 @@ func triggerPanic() {
 
 // @host localhost:8888
 // @BasePath /api/v1
+
+// @termsOfService https://swagger.io/terms/
+
+// @contact.name Ramandeep Bhagat
+// @contact.email rdbhagat999@gmail.com
 func main() {
 
 	executeGreetFunction()
@@ -135,6 +140,9 @@ func main() {
 	cartRouter := apiVersion1.Group(constants.CartGroup)
 	cartRouter.Use(middlewares.JWTAuthMiddleware(userController))
 	cartRouter.GET(constants.GetCartByUserIdRoute, externalController.GetCartByUserId)
+	cartRouter.POST(constants.AddCartByUserIdRoute, externalController.AddCardByUserId)
+	cartRouter.PUT(constants.UpdateCartByUserIdRoute, externalController.UpdateCardByUserId)
+	cartRouter.DELETE(constants.DeleteCartByIdRoute, externalController.DeleteCardById)
 
 	server := &http.Server{
 		Addr:           ":" + loadConfig.SERVER_PORT,

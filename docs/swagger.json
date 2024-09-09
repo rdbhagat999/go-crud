@@ -3,7 +3,11 @@
     "info": {
         "description": "A demo Service API in Golang using Gin Framework",
         "title": "Demo Service API",
-        "contact": {},
+        "termsOfService": "https://swagger.io/terms/",
+        "contact": {
+            "name": "Ramandeep Bhagat",
+            "email": "rdbhagat999@gmail.com"
+        },
         "version": "1.0.0"
     },
     "host": "localhost:8888",
@@ -17,6 +21,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "auth"
                 ],
                 "summary": "Login user",
                 "parameters": [
@@ -36,6 +43,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -49,10 +68,25 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "Logout user",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -69,7 +103,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "auth"
+                ],
                 "summary": "Register user",
+                "operationId": "CreateUser",
                 "parameters": [
                     {
                         "description": "Create user",
@@ -81,6 +119,41 @@
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/addusercart": {
+            "post": {
+                "description": "Create cart by userId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Create cart by userId",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -100,7 +173,56 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "cart"
+                ],
                 "summary": "Get cart by userId",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/deletecart": {
+            "delete": {
+                "description": "Delete cart by cartId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Delete cart by cartId",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/cart/updateusercart": {
+            "put": {
+                "description": "Update cart by cartId from external API",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cart"
+                ],
+                "summary": "Update cart by cartId",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -120,10 +242,26 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Get all post",
+                "operationId": "FindAllPost",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -138,7 +276,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Create post",
+                "operationId": "CreatePost",
                 "parameters": [
                     {
                         "description": "Create post",
@@ -156,6 +298,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             }
@@ -169,10 +323,26 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Get all post by userId",
+                "operationId": "FindAllByUserId",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -189,7 +359,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Get a single post by its id",
+                "operationId": "FindByIdPost",
                 "parameters": [
                     {
                         "type": "string",
@@ -205,6 +379,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -216,7 +402,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Update post",
+                "operationId": "UpdatePost",
                 "parameters": [
                     {
                         "type": "string",
@@ -241,6 +431,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -252,7 +454,11 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "post"
+                ],
                 "summary": "Delete post",
+                "operationId": "DeletePost",
                 "parameters": [
                     {
                         "type": "string",
@@ -265,6 +471,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -281,10 +499,25 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "user"
+                ],
                 "summary": "Get all users",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -301,10 +534,25 @@
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "user"
+                ],
                 "summary": "Get authenticated user",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -320,6 +568,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Get a single user by its id",
                 "parameters": [
@@ -337,6 +588,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -347,6 +610,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Update user",
                 "parameters": [
@@ -373,6 +639,18 @@
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
                     }
                 }
             },
@@ -383,6 +661,9 @@
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "user"
                 ],
                 "summary": "Delete user",
                 "parameters": [
@@ -397,6 +678,18 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/response.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }

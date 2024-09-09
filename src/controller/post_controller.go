@@ -28,13 +28,17 @@ func postControllerPrintln(err error) {
 }
 
 // CreatePost godoc
+// @ID CreatePost
 // @Summary  Create post
 // @Description  Save post in database
 // @Param  post body request.CreatePostRequest true "Create post"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /posts [POST]
 func (controller *PostController) Create(ctx *gin.Context) {
 
@@ -121,14 +125,18 @@ func (controller *PostController) Create(ctx *gin.Context) {
 }
 
 // UpdatePost godoc
+// @ID UpdatePost
 // @Summary  Update post
 // @Description  Update and save post in database
 // @Param  postId path string true "Update post by id"
 // @Param  post body request.UpdatePostRequest true "Update post"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /posts/{postId} [PUT]
 func (controller *PostController) Update(ctx *gin.Context) {
 
@@ -259,13 +267,17 @@ func (controller *PostController) Update(ctx *gin.Context) {
 }
 
 // DeletePost godoc
+// @ID DeletePost
 // @Summary  Delete post
 // @Description  Delete post from database
 // @Param  postId path string true "Delete post by id"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /posts/{postId} [DELETE]
 func (controller *PostController) Delete(ctx *gin.Context) {
 
@@ -369,13 +381,17 @@ func (controller *PostController) Delete(ctx *gin.Context) {
 }
 
 // FindByIdPost godoc
+// @ID FindByIdPost
 // @Summary  Get a single post by its id
 // @Description  Returns a single post when postId maches id
 // @Param  postId path string true "Find post by id"
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /posts/{postId} [GET]
 func (controller *PostController) FindById(ctx *gin.Context) {
 	postId := ctx.Param("postId")
@@ -440,12 +456,16 @@ func (controller *PostController) FindById(ctx *gin.Context) {
 }
 
 // FindAllPost godoc
+// @ID FindAllPost
 // @Summary  Get all post
 // @Description Returns a list of post
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /posts [GET]
 func (controller *PostController) FindAll(ctx *gin.Context) {
 	user_id, userExists := ctx.Get("userId")
@@ -523,12 +543,16 @@ func (controller *PostController) FindAll(ctx *gin.Context) {
 }
 
 // FindAllByUserId godoc
+// @ID FindAllByUserId
 // @Summary  Get all post by userId
 // @Description Returns a list of post
 // @Accept json
 // @Produce  json
+// @Tags post
 // @Post  post
-// @Success  200 {object} response.Response{}
+// @Success 200 {object} response.Response{}
+// @Failure 400 {object} response.Response{}
+// @Failure 500 {object} response.Response{}
 // @Router  /posts/userposts [GET]
 func (controller *PostController) FindAllByUserId(ctx *gin.Context) {
 	userId, userExists := ctx.Get("userId")

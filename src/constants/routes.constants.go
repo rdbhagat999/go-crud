@@ -43,5 +43,8 @@ const (
 
 // external API routes
 const (
-	GetCartByUserIdRoute = "/cartbyuser"
+	GetCartByUserIdRoute    = "/cartbyuser"
+	AddCartByUserIdRoute    = "/addusercart"
+	UpdateCartByUserIdRoute = "/updateusercart"
+	DeleteCartByIdRoute     = "/deletecart"
 )
