@@ -80,6 +80,8 @@ func main() {
 
 	log.Info().Msg("Server started")
 
+	dsa.Chimken_Biryani_With_Go_Routines()
+
 	loadConfig, err := config.LoadConfig()
 
 	if err != nil {
